@@ -92,11 +92,13 @@ export interface StoryChapter {
   marginNotes: MarginNote[];
 }
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 export const ARTWORKS = {
-  heroCliff: '/src/assets/images/hero_wuwang_cliff_1795442721319.jpg',
-  shenChangle: '/src/assets/images/portrait_shen_changle_1795442721257.jpg',
-  xieWujiu: '/src/assets/images/portrait_xie_wujiu_1795442722445.jpg',
-  lanternRiver: '/src/assets/images/scene_lantern_river_1795442721968.jpg',
+  heroCliff: `${BASE_URL}src/assets/images/hero_wuwang_cliff_1795442721319.jpg`,
+  shenChangle: `${BASE_URL}src/assets/images/portrait_shen_changle_1795442721257.jpg`,
+  xieWujiu: `${BASE_URL}src/assets/images/portrait_xie_wujiu_1795442722445.jpg`,
+  lanternRiver: `${BASE_URL}src/assets/images/scene_lantern_river_1795442721968.jpg`,
 };
 
 export const STORY_META = {
