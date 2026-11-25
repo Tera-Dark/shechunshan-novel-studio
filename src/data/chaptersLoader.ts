@@ -30,6 +30,12 @@ import ch20Raw from '../../story/chapters/第20章_药丸异香与三丈灯火.m
 import trackerForeshadowRaw from '../../story/tracker/01_伏笔追踪总表.md?raw';
 import trackerStateRaw from '../../story/tracker/02_角色状态与POV边界矩阵.md?raw';
 import trackerRollingRaw from '../../story/tracker/03_滚动摘要与章节质检记录.md?raw';
+import wbCharterRaw from '../../story/writing-base/00_文风基准与去AI味宪章.md?raw';
+import wbDictionaryRaw from '../../story/writing-base/01_设定与事实词典.md?raw';
+import wbChecklistRaw from '../../story/writing-base/03_章节写作与深度去AI味检查清单.md?raw';
+import wbHumanStyleRaw from '../../story/writing-base/04_高人味文风拆解参考.md?raw';
+import wbTianguanRefRaw from '../../story/writing-base/05_天官赐福文风与叙事范本拆解.md?raw';
+import wbSummaryRaw from '../../story/writing-base/99_章节摘要.md?raw';
 
 export type DocCategory =
   | '铁律与文风'
@@ -102,6 +108,42 @@ export const STORY_FILES: StoryDocFile[] = [
     category: '铁律与文风',
     summary: '动态复查与防遗忘最高准则：晋江 3000 字铁律、文风配比、六大防穿帮技术桩与第 1–20 章剧情账本。',
     content: auditMemoRaw,
+  },
+  {
+    id: 'wb-charter',
+    path: '/story/writing-base/00_文风基准与去AI味宪章.md',
+    filename: '00_文风基准与去AI味宪章.md',
+    title: '编写基地 · 文风基准与去 AI 味宪章',
+    category: '铁律与文风',
+    summary: '融合 chinese-novelist-skill 白描/留白/潜台词技法与朱雀 0.4077 实测绿灯基因的单一文风事实源。',
+    content: wbCharterRaw,
+  },
+  {
+    id: 'wb-checklist',
+    path: '/story/writing-base/03_章节写作与深度去AI味检查清单.md',
+    filename: '03_章节写作与深度去AI味检查清单.md',
+    title: '编写基地 · 单章四阶段去 AI 味检查清单',
+    category: '铁律与文风',
+    summary: '写前准备 → 创作硬约束 → 深度去 AI 味与脚本门禁 → 摘要落盘与 80 分制自评表。',
+    content: wbChecklistRaw,
+  },
+  {
+    id: 'wb-dictionary',
+    path: '/story/writing-base/01_设定与事实词典.md',
+    filename: '01_设定与事实词典.md',
+    title: '编写基地 · 设定与事实词典（先登记后动笔）',
+    category: '记忆与追踪',
+    summary: '严禁现场编数：锁定全书硬数字、时间线、视觉锚点、名词首现线索与 POV 知识边界。',
+    content: wbDictionaryRaw,
+  },
+  {
+    id: 'wb-summary',
+    path: '/story/writing-base/99_章节摘要.md',
+    filename: '99_章节摘要.md',
+    title: '编写基地 · 后果驱动型章节摘要底本',
+    category: '记忆与追踪',
+    summary: '遵循 chinese-novelist-skill 摘要契约：记录关键后果、人物已知/未知与未了事项。',
+    content: wbSummaryRaw,
   },
   {
     id: 'skill',
@@ -336,6 +378,24 @@ export const STORY_FILES: StoryDocFile[] = [
     category: '正文草稿',
     summary: '油灯下碾碎《寒髓丸》认出与攻身上旧药同源，受体贴收匣不逼问，共饮姜汤定下并肩之约。',
     content: ch20Raw,
+  },
+  {
+    id: 'wb-human-style',
+    path: '/story/writing-base/04_高人味文风拆解参考.md',
+    filename: '04_高人味文风拆解参考.md',
+    title: '高人味文风拆解与反朱雀实操参考',
+    category: '铁律与文风',
+    summary: '基于朱雀实测数据的纯人工笔迹写作法：松弛说书人旁白、荒诞生活流对话与 AI 套组排查。',
+    content: wbHumanStyleRaw,
+  },
+  {
+    id: 'wb-tianguan-ref',
+    path: '/story/writing-base/05_天官赐福文风与叙事范本拆解.md',
+    filename: '05_天官赐福文风与叙事范本拆解.md',
+    title: '《天官赐福》文风与叙事范本拆解',
+    category: '铁律与文风',
+    summary: '结合范本前十章量化统计（62.6% 对话占比、44.1 字均段长），提炼五大叙事基因与《赊春山》对照落地方案。',
+    content: wbTianguanRefRaw,
   },
   {
     id: 'tracker-foreshadow',

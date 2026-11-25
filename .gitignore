@@ -6,3 +6,4 @@ coverage/
 *.log
 .env*
 !.env.example
+天官赐福_*.zip

@@ -64,7 +64,8 @@ shechunshan-novel-studio/
 │   ├── 05_千章连载商业化与读者钩子规划.md
 │   ├── 06_创作铁律与动态复查备忘录.md
 │   ├── chapters/               # 正文章节草稿（第 01–20 章）
-│   └── tracker/                # 伏笔总表、POV 矩阵与滚动质检记录
+│   ├── tracker/                # 伏笔总表、POV 矩阵与滚动质检记录
+│   └── writing-base/           # 文风基准、事实词典、反朱雀清单与《天官赐福》范本拆解
 ├── .env.example                # 环境变量示例
 ├── index.html
 ├── metadata.json

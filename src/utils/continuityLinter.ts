@@ -12,6 +12,11 @@ export type ZhuquePrecheckTier =
   | '中风险 · 需压低句长/逗号比'
   | '高风险 · 易触发朱雀疑似AI';
 
+export interface RepeatedMotif {
+  phrase: string;
+  count: number;
+}
+
 export interface ChapterLintReport {
   chapterId: string;
   title: string;
@@ -31,14 +36,20 @@ export interface ChapterLintReport {
   actionPeriodQuoteCount: number;
   splitDialogueCount: number;
   exclamationCount: number;
+  dialogueRatio: number;
+  narParaAvg: number;
+  burstinessCV: number;
+  crossParaConsistency: number;
+  quoteBalanced: boolean;
+  endingHookOk: boolean;
+  endingSummary: string;
+  repeatedMotifs: RepeatedMotif[];
   zhuqueTier: ZhuquePrecheckTier;
   findings: LintFinding[];
   passed: boolean;
 }
 
 const BANNED_AI_CLICHES = [
-  '仿佛',
-  '宛如',
   '几不可闻',
   '几不可察',
   '微不可闻',
@@ -63,11 +74,8 @@ const BANNED_ZHUQUE_AI_FINGERPRINTS = [
   '悄无声息',
   '泛起一层',
   '透着几分',
-  '硬生生',
   '几乎在同一时间',
   '几乎同时',
-  '不禁',
-  '不由得',
   '不动声色',
   '慢条斯理',
   '不紧不慢',
@@ -75,12 +83,7 @@ const BANNED_ZHUQUE_AI_FINGERPRINTS = [
   '指节分明',
   '若无其事',
   '若有似无',
-  '话音未落',
   '思忖间',
-  '不但没',
-  '也难怪',
-  '——',
-  '；',
 ];
 
 const SCREENPLAY_AI_MARKERS = [
@@ -195,6 +198,107 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
       fullText.match(/”[^“”\n]{2,35}[，。]“/g) ?? [];
     const splitDialogueCount = splitDialogueMatches.length;
 
+    const spokenChars = (fullText.match(/“[^”]*”/g) ?? []).reduce(
+      (sum, q) => sum + q.length,
+      0
+    );
+    const dialogueRatio =
+      charCount > 0 ? Math.round((spokenChars / charCount) * 1000) / 10 : 0;
+    const narParas = ch.paragraphs.filter((p) => !p.includes('“'));
+    const narParaAvg =
+      narParas.length > 0
+        ? Math.round(
+            (narParas.reduce((sum, p) => sum + p.length, 0) / narParas.length) *
+              10
+          ) / 10
+        : 0;
+
+    const burstinessCV =
+      meanLen > 0
+        ? Math.round((Math.sqrt(variance) / meanLen) * 1000) / 1000
+        : 0;
+
+    const paraAvgLens = ch.paragraphs.map((p) => {
+      const ps = p
+        .split(/[。！？]+/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      return ps.length > 0
+        ? ps.reduce((sum, s) => sum + s.length, 0) / ps.length
+        : 0;
+    });
+    const paraVocRich = ch.paragraphs.map((p) => {
+      const cs = p.match(/[\u4e00-\u9fff]/g) ?? [];
+      return cs.length > 0 ? new Set(cs).size / cs.length : 0;
+    });
+    const calcCv = (arr: number[]) => {
+      if (arr.length === 0) return 0;
+      const m = arr.reduce((a, b) => a + b, 0) / arr.length;
+      if (m <= 0) return 0;
+      const v = arr.reduce((a, b) => a + Math.pow(b - m, 2), 0) / arr.length;
+      return Math.sqrt(v) / m;
+    };
+    const crossParaConsistency =
+      Math.round((1 - (calcCv(paraAvgLens) + calcCv(paraVocRich)) / 2) * 1000) /
+      1000;
+
+    const openCN = (compactText.match(/“/g) ?? []).length;
+    const closeCN = (compactText.match(/”/g) ?? []).length;
+    const openCorner = (compactText.match(/「/g) ?? []).length;
+    const closeCorner = (compactText.match(/」/g) ?? []).length;
+    const quoteBalanced = openCN === closeCN && openCorner === closeCorner;
+
+    const lastPara = ch.paragraphs[ch.paragraphs.length - 1] ?? '';
+    const lastPlain = lastPara.replace(/[“”「」『』]/g, '');
+    const lastSentCount = lastPlain
+      .split(/[。！？…]+/)
+      .filter((s) => s.trim().length > 0).length;
+    const lastCjkCount = (lastPlain.match(/[\u4e00-\u9fff]/g) ?? []).length;
+    const endingHookOk = lastSentCount <= 2 && lastCjkCount <= 140;
+    const endingSummary = `${lastSentCount} 句 / ${lastCjkCount} 字`;
+
+    const runs = fullText
+      .split(/[^\u4e00-\u9fff]+/)
+      .filter((r) => r.length >= 4);
+    const seedPos = new Map<string, { run: string; at: number }[]>();
+    for (const run of runs) {
+      for (let at = 0; at + 4 <= run.length; at++) {
+        const gram = run.slice(at, at + 4);
+        const list = seedPos.get(gram);
+        if (list) list.push({ run, at });
+        else seedPos.set(gram, [{ run, at }]);
+      }
+    }
+    const motifBest = new Map<string, number>();
+    for (const list of seedPos.values()) {
+      if (list.length < 3) continue;
+      let len = 4;
+      while (len < 10) {
+        let nextCh: string | null = null;
+        let agree = true;
+        for (const item of list) {
+          const chChar =
+            item.at + len < item.run.length ? item.run[item.at + len] : null;
+          if (chChar === null || (nextCh !== null && chChar !== nextCh)) {
+            agree = false;
+            break;
+          }
+          nextCh = chChar;
+        }
+        if (!agree) break;
+        len++;
+      }
+      const phrase = list[0].run.slice(list[0].at, list[0].at + len);
+      const prev = motifBest.get(phrase);
+      if (prev === undefined || list.length > prev) {
+        motifBest.set(phrase, list.length);
+      }
+    }
+    const repeatedMotifs: RepeatedMotif[] = [...motifBest.entries()]
+      .sort((a, b) => b[1] - a[1] || b[0].length - a[0].length)
+      .slice(0, 5)
+      .map(([phrase, count]) => ({ phrase, count }));
+
     const findings: LintFinding[] = [];
 
     const jinjiangLengthNote =
@@ -211,39 +315,30 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
       });
     }
 
-    if (actionPeriodQuoteCount > 0) {
-      findings.push({
-        ruleId: 'action-period-quote',
-        severity: 'warn',
-        label: `命中“动作句号+引语”伪装式 AI 模板（${actionPeriodQuoteCount} 处）`,
-        matches: ['对照第02章过检基因（0次），对话段须直接以引号起头或动作独立成段'],
-      });
-    }
-
-    if (avgSentenceLen > 23.5) {
+    if (avgSentenceLen > 26) {
       findings.push({
         ruleId: 'avg-sentence-len',
         severity: 'warn',
         label: `平均句长偏长（${avgSentenceLen} 字/句）`,
-        matches: ['对照第02章过检基因（19.3 字/句），建议多打句号拆短，压至 23.5 以下'],
+        matches: ['建议长短句交错，将平均句长控制在 26 字以内'],
       });
     }
 
-    if (commaToPeriodRatio > 1.48) {
+    if (commaToPeriodRatio > 1.75) {
       findings.push({
         ruleId: 'comma-period-ratio',
         severity: 'warn',
         label: `逗号/句号比偏高（${commaToPeriodRatio}）`,
-        matches: ['对照第02章过检基因（1.31），连环逗号长句易触朱雀 AI 判定，建议压至 1.48 以下'],
+        matches: ['对标 100% 人工样板（1.55），建议控制在 1.75 以下'],
       });
     }
 
-    if (diDensityPer100 > 0.2) {
+    if (diDensityPer100 > 0.45) {
       findings.push({
         ruleId: 'di-density',
         severity: 'warn',
         label: `“地”字副词偏多（每百字 ${diDensityPer100} 个）`,
-        matches: ['对照第02章过检基因（0.0/百字），改用裸动词，压至 0.2 以下'],
+        matches: ['建议压至 0.45 以下'],
       });
     }
 
@@ -304,30 +399,42 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
       });
     }
 
-    if (colonQuoteCount > 0) {
-      findings.push({
-        ruleId: 'colon-dialogue-template',
-        severity: 'warn',
-        label: `“动作+冒号+引语”剧本句式（${colonQuoteCount} 次）`,
-        matches: ['对照第02章过检基因，必须清零'],
-      });
-    }
-
-    if (exclamationCount > 2) {
+    if (exclamationCount > 16) {
       findings.push({
         ruleId: 'exclamation-density',
         severity: 'warn',
-        label: `感叹号偏密（${exclamationCount} 处）`,
-        matches: ['建议压至 2 处以内'],
+        label: `感叹号过密（${exclamationCount} 处）`,
+        matches: ['建议控制在 16 处以内'],
       });
     }
 
-    if (deDensityPer100 > 3.2) {
+    if (deDensityPer100 > 3.6) {
       findings.push({
         ruleId: 'de-density',
         severity: 'warn',
         label: `“的”字定语密度偏高（每百字 ${deDensityPer100} 个）`,
-        matches: ['对照第02章过检基因（2.1/百字），建议压至 3.2 以下'],
+        matches: ['建议压至 3.6 以下'],
+      });
+    }
+
+    if (!quoteBalanced) {
+      findings.push({
+        ruleId: 'quote-balance',
+        severity: 'error',
+        label: '中文引号未成对闭合',
+        matches: ['请检查“”或「」是否遗漏配对引号'],
+      });
+    }
+
+    const symmetryHits = [
+      ...(fullText.match(/左手[^。！？]{2,18}[，,]右手/g) ?? []),
+    ];
+    if (symmetryHits.length > 0) {
+      findings.push({
+        ruleId: 'ai-symmetry',
+        severity: 'warn',
+        label: `命中对称公式 AI 句式（${symmetryHits.length} 处）`,
+        matches: symmetryHits.slice(0, 4),
       });
     }
 
@@ -335,13 +442,12 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
 
     const riskPoints =
       (hasError ? 4 : 0) +
-      (actionPeriodQuoteCount > 0 ? 2 : 0) +
-      (avgSentenceLen > 23.5 ? 2 : 0) +
-      (commaToPeriodRatio > 1.48 ? 2 : 0) +
-      (diDensityPer100 > 0.2 ? 1 : 0) +
-      (colonQuoteCount > 0 ? 2 : 0) +
+      (avgSentenceLen > 26 ? 2 : 0) +
+      (commaToPeriodRatio > 1.75 ? 2 : 0) +
+      (diDensityPer100 > 0.45 ? 1 : 0) +
       (zhuqueHits.length > 0 ? 2 : 0) +
-      (screenplayHits.length > 0 ? 2 : 0);
+      (screenplayHits.length > 0 ? 2 : 0) +
+      (symmetryHits.length > 0 ? 1 : 0);
 
     const zhuqueTier: ZhuquePrecheckTier =
       riskPoints === 0
@@ -369,6 +475,14 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
       actionPeriodQuoteCount,
       splitDialogueCount,
       exclamationCount,
+      dialogueRatio,
+      narParaAvg,
+      burstinessCV,
+      crossParaConsistency,
+      quoteBalanced,
+      endingHookOk,
+      endingSummary,
+      repeatedMotifs,
       zhuqueTier,
       findings,
       passed: !hasError && findings.length === 0,

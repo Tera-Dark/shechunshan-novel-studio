@@ -109,7 +109,6 @@ export const ARTWORKS = {
   heroCliff: `${BASE_URL}src/assets/images/hero_wuwang_cliff_1795442721319.jpg`,
   xieZheng: `${BASE_URL}src/assets/images/xiezheng_portrait_1795585832526.jpg`,
   xieZhengMasked: `${BASE_URL}src/assets/images/xiezheng_masked_1795585834436.jpg`,
-  chuYue: `${BASE_URL}src/assets/images/chuyue_portrait_1795585837592.jpg`,
   chuYueScholar: `${BASE_URL}src/assets/images/chuyue_scholar_1795585838964.jpg`,
   lanternRiver: `${BASE_URL}src/assets/images/scene_lantern_river_1795442721968.jpg`,
 };
@@ -315,14 +314,9 @@ export const PROTAGONISTS: Protagonist[] = [
     artifactName: '“不赊”紫毫、《太虚定命册》、水墨折扇与九张护心符',
     artifactDesc: '虽无灵脉，却凭“天机眼看破乌黑命丝 + 紫毫借阵转嫁反噬业火 + 同心链借剑意”周旋八重界域；同时借《太虚定命册》强封魂火吊命五年。',
     visualSummary: '【病弱文士定版】清瘦单薄、极畏寒气，冷瓷苍白肤色衬着狭长倦怠的眼眸与眼尾淡淡薄红，唇角总带不动声色的文人淡笑；乌发松挽斜插素银枯枝寒梅簪、耳侧垂一缕暗红细辫；南荒常态着宽大玄墨暗云纹文士长袍配半旧黑狐毛领与素银弯月腰佩，手执紫毫命册，破局正装则外罩素白狐裘大氅、轻握水墨折扇。',
-    image: ARTWORKS.chuYue,
-    imageCaption: 'Fig. 2 — 楚越（字栖寒）病弱文士定版立绘。宽大玄墨云纹袍配黑狐毛领与素银枯枝簪，雨窗旁执笔翻册，病骨之下藏着折不断的文人孤傲。',
+    image: ARTWORKS.chuYueScholar,
+    imageCaption: 'Fig. 2 — 楚越（字栖寒）素裘执扇文士态定版立绘。玄墨暗金云纹长袍外罩素白狐裘大氅，瘦白手指轻握水墨折扇，疏朗冷艳、锋芒内敛。',
     references: [
-      {
-        src: ARTWORKS.chuYue,
-        label: '南荒执笔常态',
-        note: '病弱感文化人常态：玄墨暗云纹长袍配黑狐毛领、素银枯枝簪与暗红细辫，倚雨窗手执紫毫与《太虚定命册》。',
-      },
       {
         src: ARTWORKS.chuYueScholar,
         label: '素裘执扇文士态',

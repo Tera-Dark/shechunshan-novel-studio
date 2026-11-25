@@ -71,7 +71,9 @@ export function ContinuityEngine() {
   );
 
   const compiledContextPacket = useMemo(() => {
-    const skillDoc = STORY_FILES.find((f) => f.id === 'skill')?.content ?? '';
+    const wbCharterDoc = STORY_FILES.find((f) => f.id === 'wb-charter')?.content ?? '';
+    const wbDictDoc = STORY_FILES.find((f) => f.id === 'wb-dictionary')?.content ?? '';
+    const wbChecklistDoc = STORY_FILES.find((f) => f.id === 'wb-checklist')?.content ?? '';
     const auditDoc = STORY_FILES.find((f) => f.id === 'audit')?.content ?? '';
     const foreshadowDoc =
       STORY_FILES.find((f) => f.id === 'tracker-foreshadow')?.content ?? '';
@@ -88,25 +90,31 @@ export function ContinuityEngine() {
       .join('\n');
 
     return [
-      '# 《赊春山》下一轮续写防吃书上下文包（Context Compiler 自动汇编）',
+      '# 《赊春山》编写基地防吃书与去 AI 味上下文包（Context Compiler 自动汇编）',
       '',
-      '## 一、待推进章节细纲（下一轮优先：第 21–25 章）',
+      '## 一、编写基地 · 文风基准与去 AI 味宪章',
+      wbCharterDoc.trim(),
+      '',
+      '## 二、编写基地 · 设定与事实词典（先登记后动笔）',
+      wbDictDoc.trim(),
+      '',
+      '## 三、单章写作与深度去 AI 味检查清单',
+      wbChecklistDoc.trim(),
+      '',
+      '## 四、待推进章节细纲（下一轮优先：第 21–25 章）',
       beatsMarkdown,
       '',
-      '## 二、角色运行态与 POV 知识边界矩阵',
+      '## 五、角色运行态与 POV 知识边界矩阵',
       stateDoc.trim(),
       '',
-      '## 三、滚动摘要压缩树与衔接锚点',
+      '## 六、滚动摘要压缩树与衔接锚点',
       rollingDoc.trim(),
       '',
-      '## 四、伏笔追踪账本',
+      '## 七、伏笔追踪账本',
       foreshadowDoc.trim(),
       '',
-      '## 五、创作铁律与保密锁',
+      '## 八、创作铁律与保密锁',
       auditDoc.trim(),
-      '',
-      '## 六、去 AI 味与《燕云》江湖烟火写作规范',
-      skillDoc.trim(),
     ].join('\n');
   }, [upcomingBeats]);
 
@@ -498,14 +506,14 @@ export function ContinuityEngine() {
             <div className="p-5 sm:p-6 bg-[#F4F0E8] dark:bg-[#1E1C19] border border-stone-200 dark:border-stone-800 space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-3 border-b border-stone-200 dark:border-stone-800">
                 <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
-                  朱雀深度逆向对标 · 二章过检基因与每章 ≥3,000 纯汉字硬门禁
+                  编写基地 · 融合 chinese-novelist-skill & 朱雀实测去 AI 味审读门禁
                 </h3>
                 <span className="text-xs font-folio text-stone-500 dark:text-stone-400">
-                  硬性阈值：纯汉字 ≥3000 · 句均 ≤23.5 · 逗句比 ≤1.48 · 动作。“ = 0 · 地 ≤0.2%
+                  硬门禁：纯汉字 ≥3000 · 突发性 ≥0.35 · 跨段一致 ≤0.70 · 零信息倾倒/对称句 · 章末钩子 ≤2句
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-300 leading-relaxed">
-                拆解“原第 02 章过朱雀 vs 原第 01 章 100% 疑似 AI”的量化差距后，定位到真正触发朱雀的核心机器信号：<strong>长逗号复句串</strong>（原二章句均 19.3 字、逗句比 1.31；原一章高达 25.5 字、逗句比 1.67）、<strong><code>动作。“台词”</code> 并列模板</strong>（原二章 0 次，原一章 9 次）、<strong>“地”字状语过密</strong>与<strong>大模型百科设定腔</strong>。全书已改定约 400 章紧凑体量，第 01–20 章（含扩充至 3,700 纯汉字的第 02 章）全部按二章短句口语基因重写并通过本地预检，可直接复制纯正文前往朱雀实测。
+                完整吸收 <code>chinese-novelist-skill</code> 编写基地架构（文风基准宪章、先登记后动笔词典、四阶段去 AI 味清单、后果型摘要底本与 <code>analysis.mjs</code> 审读指标），叠加本项目朱雀实测分段经验：砍掉公式化天气开篇、对称双栏句与对话信息倾倒，拉高对话张力与白描留白，以 0.4077 绿灯段为基准逐章过检。
               </p>
             </div>
 
@@ -526,10 +534,23 @@ export function ContinuityEngine() {
                         {report.commaToPeriodRatio}
                       </p>
                       <p className="mt-1 text-xs font-folio text-stone-500 dark:text-stone-400">
+                        对话占比 {report.dialogueRatio}% · 纯叙述段均 {report.narParaAvg} 字 · 突发性{' '}
+                        {report.burstinessCV} · 跨段一致 {report.crossParaConsistency} · 章末钩子{' '}
+                        {report.endingSummary}
+                      </p>
+                      <p className="mt-1 text-xs font-folio text-stone-500 dark:text-stone-400">
                         动作。“ {report.actionPeriodQuoteCount} 次 · 剧本冒号{' '}
                         {report.colonQuoteCount} 次 · 地 {report.diDensityPer100}% · 的{' '}
                         {report.deDensityPer100}% · {report.zhuqueTier}
                       </p>
+                      {report.repeatedMotifs.length > 0 && (
+                        <p className="mt-1 text-[11px] text-stone-500 dark:text-stone-400">
+                          高频短语：
+                          {report.repeatedMotifs
+                            .map((m) => `${m.phrase}(${m.count})`)
+                            .join('、')}
+                        </p>
+                      )}
                     </div>
                     <div
                       className={`inline-flex items-center gap-1 text-xs font-semibold shrink-0 ${
@@ -554,7 +575,7 @@ export function ContinuityEngine() {
 
                   {report.findings.length === 0 ? (
                     <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
-                      已通过全项二章过检基因门禁：纯汉字 ≥3,000、短句断拍（句均 ≤23.5 / 逗句比 ≤1.48）、零“动作。“台词””与剧本冒号、低“的/地”密度、零 AI 套话与剧透词。
+                      已通过全项编写基地去 AI 味门禁：纯汉字 ≥3,000、短句断拍（句均 ≤23.5 / 逗句比 ≤1.48）、引号闭合、零对称/剧本套话与剧透词。
                     </p>
                   ) : (
                     <ul className="space-y-2 text-xs">
