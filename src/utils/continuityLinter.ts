@@ -8,21 +8,27 @@ export interface LintFinding {
 }
 
 export type ZhuquePrecheckTier =
-  | '低风险 · 贴近人味基准'
-  | '中风险 · 建议精修演出腔'
+  | '低风险 · 贴近二章过检基因'
+  | '中风险 · 需压低句长/逗号比'
   | '高风险 · 易触发朱雀疑似AI';
 
 export interface ChapterLintReport {
   chapterId: string;
   title: string;
   charCount: number;
+  cjkCharCount: number;
   jinjiangLengthNote: string;
   paragraphCount: number;
+  avgParaLen: number;
+  avgSentenceLen: number;
+  commaToPeriodRatio: number;
   shortFragmentRatio: number;
   sentenceStdDev: number;
   shortSentenceRatio: number;
   deDensityPer100: number;
+  diDensityPer100: number;
   colonQuoteCount: number;
+  actionPeriodQuoteCount: number;
   splitDialogueCount: number;
   exclamationCount: number;
   zhuqueTier: ZhuquePrecheckTier;
@@ -62,6 +68,17 @@ const BANNED_ZHUQUE_AI_FINGERPRINTS = [
   '几乎同时',
   '不禁',
   '不由得',
+  '不动声色',
+  '慢条斯理',
+  '不紧不慢',
+  '一丝不苟',
+  '指节分明',
+  '若无其事',
+  '若有似无',
+  '话音未落',
+  '思忖间',
+  '不但没',
+  '也难怪',
   '——',
   '；',
 ];
@@ -84,6 +101,10 @@ const SCREENPLAY_AI_MARKERS = [
   '只听',
   '却见',
   '此时此刻',
+  '随即',
+  '随后',
+  '陡然',
+  '骤然',
 ];
 
 const BANNED_MODERN_CORP_TERMS = [
@@ -117,17 +138,18 @@ const EARLY_SPOILER_LOCKS: { term: string; maxSafeChapter: number; reason: strin
 export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[] {
   return chapters.map((ch, idx) => {
     const chapterNum = idx + 1;
-    const isZhuqueBaselineCh2 = ch.id === 'ch-2';
     const fullText = ch.paragraphs.join('\n');
     const compactText = ch.paragraphs.join('');
     const charCount = compactText.length;
+    const cjkCharCount = (compactText.match(/[\u4e00-\u9fff]/g) ?? []).length;
     const paragraphCount = ch.paragraphs.length;
+    const avgParaLen =
+      paragraphCount > 0 ? Math.round((charCount / paragraphCount) * 10) / 10 : 0;
 
     const shortFragments = ch.paragraphs.filter((p) => p.trim().length <= 4).length;
     const shortFragmentRatio =
       paragraphCount > 0 ? Math.round((shortFragments / paragraphCount) * 100) : 0;
 
-    // Anti-Zhuque Burstiness & Modifier Density metrics
     const sentences = compactText
       .split(/[。！？]+/)
       .map((s) => s.trim())
@@ -138,6 +160,8 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
       lengths.length > 0
         ? lengths.reduce((sum, n) => sum + n, 0) / lengths.length
         : 0;
+    const avgSentenceLen = Math.round(meanLen * 10) / 10;
+
     const variance =
       lengths.length > 0
         ? lengths.reduce((sum, n) => sum + Math.pow(n - meanLen, 2), 0) /
@@ -151,11 +175,21 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
         ? Math.round((shortSentenceCount / lengths.length) * 100)
         : 0;
 
-    const deMatches = compactText.match(/[的地]/g) ?? [];
+    const commas = (compactText.match(/，/g) ?? []).length;
+    const periods = Math.max(1, (compactText.match(/。/g) ?? []).length);
+    const commaToPeriodRatio = Math.round((commas / periods) * 100) / 100;
+
+    const deMatches = compactText.match(/的/g) ?? [];
+    const diMatches = compactText.match(/地/g) ?? [];
     const deDensityPer100 =
       charCount > 0 ? Math.round((deMatches.length / charCount) * 1000) / 10 : 0;
+    const diDensityPer100 =
+      charCount > 0 ? Math.round((diMatches.length / charCount) * 1000) / 10 : 0;
 
     const colonQuoteCount = (fullText.match(/：“/g) ?? []).length;
+    const actionPeriodQuoteCount = ch.paragraphs.filter((p) =>
+      /^[^“”\n]+[。，]“/.test(p.trim())
+    ).length;
     const exclamationCount = (fullText.match(/！/g) ?? []).length;
     const splitDialogueMatches =
       fullText.match(/”[^“”\n]{2,35}[，。]“/g) ?? [];
@@ -163,18 +197,53 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
 
     const findings: LintFinding[] = [];
 
-    const jinjiangLengthNote = isZhuqueBaselineCh2
-      ? '朱雀 100% 过检原稿保留'
-      : charCount >= 2500
-        ? '符合晋江约 3000 字标准'
-        : '偏短（建议扩至约 3000 字）';
+    const jinjiangLengthNote =
+      cjkCharCount >= 3000
+        ? `纯汉字 ${cjkCharCount.toLocaleString()} 字 · 达标 ≥3000`
+        : `纯汉字 ${cjkCharCount.toLocaleString()} 字 · 未满 3000 硬线`;
 
-    if (!isZhuqueBaselineCh2 && charCount < 2400) {
+    if (cjkCharCount < 3000) {
       findings.push({
         ruleId: 'jinjiang-length',
+        severity: 'error',
+        label: `单章纯汉字未满 3000 硬线（当前 ${cjkCharCount} 字）`,
+        matches: ['硬性要求：全书 400 章每章纯汉字必须 ≥ 3000 字'],
+      });
+    }
+
+    if (actionPeriodQuoteCount > 0) {
+      findings.push({
+        ruleId: 'action-period-quote',
         severity: 'warn',
-        label: `单章字数偏短（当前 ${charCount} 字）`,
-        matches: ['晋江发文单章建议约 3000 字（2600–3500 字区间）'],
+        label: `命中“动作句号+引语”伪装式 AI 模板（${actionPeriodQuoteCount} 处）`,
+        matches: ['对照第02章过检基因（0次），对话段须直接以引号起头或动作独立成段'],
+      });
+    }
+
+    if (avgSentenceLen > 23.5) {
+      findings.push({
+        ruleId: 'avg-sentence-len',
+        severity: 'warn',
+        label: `平均句长偏长（${avgSentenceLen} 字/句）`,
+        matches: ['对照第02章过检基因（19.3 字/句），建议多打句号拆短，压至 23.5 以下'],
+      });
+    }
+
+    if (commaToPeriodRatio > 1.48) {
+      findings.push({
+        ruleId: 'comma-period-ratio',
+        severity: 'warn',
+        label: `逗号/句号比偏高（${commaToPeriodRatio}）`,
+        matches: ['对照第02章过检基因（1.31），连环逗号长句易触朱雀 AI 判定，建议压至 1.48 以下'],
+      });
+    }
+
+    if (diDensityPer100 > 0.2) {
+      findings.push({
+        ruleId: 'di-density',
+        severity: 'warn',
+        label: `“地”字副词偏多（每百字 ${diDensityPer100} 个）`,
+        matches: ['对照第02章过检基因（0.0/百字），改用裸动词，压至 0.2 以下'],
       });
     }
 
@@ -195,7 +264,7 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
       findings.push({
         ruleId: 'zhuque-fingerprint',
         severity: 'warn',
-        label: '命中朱雀高频 AI 句式/副词指纹',
+        label: '命中朱雀高频 AI 句式/逻辑指纹',
         matches: zhuqueHits,
       });
     }
@@ -235,48 +304,30 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
       });
     }
 
-    if (colonQuoteCount > 3) {
+    if (colonQuoteCount > 0) {
       findings.push({
         ruleId: 'colon-dialogue-template',
         severity: 'warn',
-        label: `“动作+冒号+引语”剧本句式偏多（${colonQuoteCount} 次）`,
-        matches: ['对照已过检的第02章（0次），建议改用先台词后动作或句号隔开，压至 3 次以内'],
+        label: `“动作+冒号+引语”剧本句式（${colonQuoteCount} 次）`,
+        matches: ['对照第02章过检基因，必须清零'],
       });
     }
 
-    if (exclamationCount > 3) {
+    if (exclamationCount > 2) {
       findings.push({
         ruleId: 'exclamation-density',
         severity: 'warn',
         label: `感叹号偏密（${exclamationCount} 处）`,
-        matches: ['对照第02章（0处），网文感叹号过密易触发朱雀 AI 腔判定，建议压至 3 处以内'],
+        matches: ['建议压至 2 处以内'],
       });
     }
 
-    if (shortFragmentRatio > 15) {
-      findings.push({
-        ruleId: 'choppy-fragments',
-        severity: 'warn',
-        label: `极短碎句成段占比偏高（${shortFragmentRatio}%）`,
-        matches: ['建议维持在 15% 以下以保正统连载文气'],
-      });
-    }
-
-    if (splitDialogueCount > 7) {
-      findings.push({
-        ruleId: 'split-dialogue-sandwich',
-        severity: 'warn',
-        label: `重复“台词+动作+台词”三明治句式过多（${splitDialogueCount} 次）`,
-        matches: ['易触发朱雀疑似 AI 判定，建议改用裸对话或自然停顿，压至 7 次以下'],
-      });
-    }
-
-    if (deDensityPer100 > 5.5) {
+    if (deDensityPer100 > 3.2) {
       findings.push({
         ruleId: 'de-density',
         severity: 'warn',
-        label: `“的/地”修饰词密度偏高（每百字 ${deDensityPer100} 个）`,
-        matches: ['建议砍掉多重定语，压至 5.5 以下以提升人工特征'],
+        label: `“的”字定语密度偏高（每百字 ${deDensityPer100} 个）`,
+        matches: ['对照第02章过检基因（2.1/百字），建议压至 3.2 以下'],
       });
     }
 
@@ -284,31 +335,38 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
 
     const riskPoints =
       (hasError ? 4 : 0) +
-      (colonQuoteCount > 3 ? 2 : colonQuoteCount >= 2 ? 1 : 0) +
-      (exclamationCount > 3 ? 2 : exclamationCount >= 2 ? 1 : 0) +
-      (screenplayHits.length >= 2 ? 2 : screenplayHits.length === 1 ? 1 : 0) +
+      (actionPeriodQuoteCount > 0 ? 2 : 0) +
+      (avgSentenceLen > 23.5 ? 2 : 0) +
+      (commaToPeriodRatio > 1.48 ? 2 : 0) +
+      (diDensityPer100 > 0.2 ? 1 : 0) +
+      (colonQuoteCount > 0 ? 2 : 0) +
       (zhuqueHits.length > 0 ? 2 : 0) +
-      (splitDialogueCount > 7 ? 1 : 0) +
-      (deDensityPer100 > 5.5 ? 1 : 0);
+      (screenplayHits.length > 0 ? 2 : 0);
 
     const zhuqueTier: ZhuquePrecheckTier =
       riskPoints === 0
-        ? '低风险 · 贴近人味基准'
+        ? '低风险 · 贴近二章过检基因'
         : riskPoints <= 2
-          ? '中风险 · 建议精修演出腔'
+          ? '中风险 · 需压低句长/逗号比'
           : '高风险 · 易触发朱雀疑似AI';
 
     return {
       chapterId: ch.id,
       title: ch.title,
       charCount,
+      cjkCharCount,
       jinjiangLengthNote,
       paragraphCount,
+      avgParaLen,
+      avgSentenceLen,
+      commaToPeriodRatio,
       shortFragmentRatio,
       sentenceStdDev,
       shortSentenceRatio,
       deDensityPer100,
+      diDensityPer100,
       colonQuoteCount,
+      actionPeriodQuoteCount,
       splitDialogueCount,
       exclamationCount,
       zhuqueTier,

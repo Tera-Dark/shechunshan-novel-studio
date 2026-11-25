@@ -52,7 +52,7 @@ export default function App() {
       `核心梗概：${STORY_META.hook}`,
       `双璧羁绊：${STORY_META.cpSummary}`,
       '',
-      '【八卷千章大纲（约 960–1050 章）】',
+      '【八卷 400 章紧凑大纲（约 400 章 · 每章 ≥3,000 纯汉字）】',
       ...VOLUMES.map(
         (v) =>
           `${v.title}（${v.timelineTag}）\n梗概：${v.summary}\n核心奇案：${v.keyCase}\n感情节点：${v.emotionalTurn}\n伏笔：${v.foreshadowing}\n`
@@ -203,7 +203,7 @@ export default function App() {
                     {
                       page: 'outlines' as AppPage,
                       title: '分卷与细纲',
-                      desc: '八卷千章结构 & 卷一 1–25 章逐章细纲表',
+                      desc: '八卷 400 章紧凑结构 & 卷一 1–25 章逐章细纲表',
                     },
                     {
                       page: 'protagonists' as AppPage,
@@ -263,7 +263,7 @@ export default function App() {
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-8 border-b border-stone-200 dark:border-stone-800">
                 <div>
                   <p className="text-xs font-folio tracking-wider text-stone-500 dark:text-stone-400 mb-2">
-                    分卷与细纲 · 约 960–1050 章架构
+                    分卷与细纲 · 约 400 章紧凑架构（每章 ≥3,000 纯汉字）
                   </p>
                   <h2 className="text-3xl lg:text-4xl font-semibold text-stone-900 dark:text-stone-100">
                     从三丈锁链慢热试探，到杀穿九重天重立契约律
@@ -285,7 +285,7 @@ export default function App() {
                         : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
                     }`}
                   >
-                    八卷总纲 (1–1000章)
+                    八卷总纲 (1–400章)
                   </button>
                   <button
                     type="button"
@@ -426,7 +426,7 @@ export default function App() {
       <footer className="border-t border-stone-200 dark:border-stone-800 py-8 bg-[#F4F0E8] dark:bg-[#191714]">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-stone-500 dark:text-stone-400">
           <p>
-            《赊春山》原创千章向修仙耽美企划 · 已拆分为独立子页面，方便随时阅读正文与审查全套档案
+            《赊春山》原创 400 章修仙耽美企划（每章 ≥3,000 纯汉字） · 已拆分为独立子页面，方便随时阅读正文与审查全套档案
           </p>
           <div className="flex flex-wrap items-center gap-5">
             {NAV_ITEMS.map((item) => (

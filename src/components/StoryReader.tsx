@@ -152,7 +152,7 @@ export function StoryReader({ isDark, onToggleDark }: StoryReaderProps) {
 
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-xs font-folio text-stone-500 dark:text-stone-400">
-              当前阅读：{chapter.title} · 正文 {currentLint.charCount.toLocaleString()} 字（{currentLint.jinjiangLengthNote}）
+              当前阅读：{chapter.title} · 纯汉字 {currentLint.cjkCharCount.toLocaleString()} 字（{currentLint.jinjiangLengthNote}） · 句均 {currentLint.avgSentenceLen} · 逗句比 {currentLint.commaToPeriodRatio}
             </p>
             <div className="flex flex-wrap items-center gap-2 shrink-0">
               <button
@@ -206,7 +206,7 @@ export function StoryReader({ isDark, onToggleDark }: StoryReaderProps) {
                 <span aria-hidden="true">·</span>
                 <span>{chapter.mood}</span>
                 <span aria-hidden="true">·</span>
-                <span className="font-folio">{chapter.wordCount}</span>
+                <span className="font-folio">{currentLint.cjkCharCount.toLocaleString()} 纯汉字</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-100">
                 {chapter.title}
@@ -266,43 +266,43 @@ export function StoryReader({ isDark, onToggleDark }: StoryReaderProps) {
                 <div className="p-6 bg-[#F4F0E8] dark:bg-[#1E1C19] border border-stone-200 dark:border-stone-800 space-y-4">
                   <div className="pb-3 border-b border-stone-200 dark:border-stone-800">
                     <p className="text-xs font-folio text-[#9A3412] dark:text-[#D97757] mb-1">
-                      朱雀去 AI 优化记录 · 对标第 02 章过检基准
+                      朱雀深度逆向重构 · 复刻原第 02 章过检基因
                     </p>
                     <h4 className="text-base font-semibold text-stone-900 dark:text-stone-100">
-                      针对 0.57–0.5964 疑似 AI 的四项定向改写
+                      为何原二章过检而原一章 100% 疑似 AI？四项核心改造
                     </h4>
                   </div>
                   <dl className="space-y-3 text-xs leading-relaxed">
                     <div>
                       <dt className="font-semibold text-stone-900 dark:text-stone-100">
-                        01. 清零剧本式冒号引语（7 → 0）
+                        01. 斩断长逗号复句串（句均 25.5 → {currentLint.avgSentenceLen} 字）
                       </dt>
                       <dd className="mt-0.5 text-stone-600 dark:text-stone-400">
-                        拆除全部“动作+神态：“台词””模板，改用与第 02 章一致的先出话后补动作、句号隔断及裸对话。
+                        原二章过检的关键在于大量“一句一顿”短句号，逗句比仅 1.31；本章已将逗句比压至 {currentLint.commaToPeriodRatio}，彻底打破大模型一逗到底的流畅复句链。
                       </dd>
                     </div>
                     <div>
                       <dt className="font-semibold text-stone-900 dark:text-stone-100">
-                        02. 剔除拟声词、感叹号与过渡套词（17 → 0）
+                        02. 清零“动作。“台词””与剧本冒号（9 → {currentLint.actionPeriodQuoteCount}）
                       </dt>
                       <dd className="mt-0.5 text-stone-600 dark:text-stone-400">
-                        删去啪地、啪叽、啪嚓、轰隆、嘻嘻、呸呸呸、嗤笑、下一秒、做完这些及 7 个感叹号，还原平实物理白描。
+                        原二章所有对话段均直接以“引号”开口，不先写动作再接句号引语；本章全部改回直接开口、话中补动作的自然网文对话节奏。
                       </dd>
                     </div>
                     <div>
                       <dt className="font-semibold text-stone-900 dark:text-stone-100">
-                        03. 修复单人 POV 越界与百科简介腔
+                        03. 删除背景百科科普腔，改用口语心理白描
                       </dt>
                       <dd className="mt-0.5 text-stone-600 dark:text-stone-400">
-                        删除楚越视角下抽离描写自己“下巴尖、嘴唇白、眼睛透亮”的大模型人设段，改回对谢峥的直观观察。
+                        剔除“九重天司命台正使……也难怪……”这类书面总结句，以楚越带烟火气的内省和随口打岔交代五年前死契旧事。
                       </dd>
                     </div>
                     <div>
                       <dt className="font-semibold text-stone-900 dark:text-stone-100">
-                        04. 压缩“的/地”至 {currentLint.deDensityPer100}/百字并扩至晋江 3000+ 字量级
+                        04. 严压“的/地”密度（地 {currentLint.diDensityPer100}% · 的 {currentLint.deDensityPer100}%）并达 {currentLint.cjkCharCount.toLocaleString()} 纯汉字
                       </dt>
                       <dd className="mt-0.5 text-stone-600 dark:text-stone-400">
-                        当前正文 {currentLint.charCount.toLocaleString()} 字、句长方差 {currentLint.sentenceStdDev}、短句占比 {currentLint.shortSentenceRatio}%、冒号引语与感叹号全清零，完整保留五花肉补瓦、老槐避雷、同心链改阵与碎碗排骨等全部锚点。
+                        严格对齐谢峥浅灰冷眸、素白细抹额、雪白广袖叠玄墨短肩氅与楚越病弱文士设定，全 20 章均已同步完成 ≥3,000 纯汉字与二章过检基因重构。
                       </dd>
                     </div>
                   </dl>

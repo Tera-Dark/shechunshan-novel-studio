@@ -34,8 +34,8 @@ export function ContinuityEngine() {
 
   const lintReports = useMemo(() => lintStoryChapters(CHAPTERS), []);
 
-  const totalChars = useMemo(
-    () => lintReports.reduce((acc, item) => acc + item.charCount, 0),
+  const totalCjkChars = useMemo(
+    () => lintReports.reduce((acc, item) => acc + item.cjkCharCount, 0),
     [lintReports]
   );
 
@@ -146,7 +146,7 @@ export function ContinuityEngine() {
               连载中枢：防吃书、伏笔与质检门禁
             </h2>
             <p className="mt-3 text-sm text-stone-600 dark:text-stone-400 max-w-3xl leading-relaxed">
-              参照长篇小说工程化四层记忆架构（硬设定宪法、POV 知识边界、伏笔账本、金字塔滚动摘要），确保推进至百章、千章时人物智商、时间线、禁词表与暗线伏笔依然严丝合缝。
+              参照长篇小说工程化四层记忆架构（硬设定宪法、POV 知识边界、伏笔账本、金字塔滚动摘要），确保约 400 章连载推进期间，人物智商、时间线、每章 ≥3,000 纯汉字与反朱雀二章过检基因严丝合缝。
             </p>
           </div>
 
@@ -189,7 +189,7 @@ export function ContinuityEngine() {
               {CHAPTERS.length} 章
             </p>
             <p className="mt-1 text-xs text-stone-600 dark:text-stone-400">
-              合计约 {totalChars.toLocaleString()} 字
+              合计 {totalCjkChars.toLocaleString()} 纯汉字（全达 3,000+）
             </p>
           </div>
 
@@ -498,14 +498,14 @@ export function ContinuityEngine() {
             <div className="p-5 sm:p-6 bg-[#F4F0E8] dark:bg-[#1E1C19] border border-stone-200 dark:border-stone-800 space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-3 border-b border-stone-200 dark:border-stone-800">
                 <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
-                  晋江五项 AI 抽检对标 · 朱雀三大特征预检与 3,000 字门禁
+                  朱雀深度逆向对标 · 二章过检基因与每章 ≥3,000 纯汉字硬门禁
                 </h3>
                 <span className="text-xs font-folio text-stone-500 dark:text-stone-400">
-                  对标：阅文 · 朱雀（最严） · DS · GLM · 千问 · 晋江约 3,000 字/章
+                  硬性阈值：纯汉字 ≥3000 · 句均 ≤23.5 · 逗句比 ≤1.48 · 动作。“ = 0 · 地 ≤0.2%
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-300 leading-relaxed">
-                依据社区公开分析，腾讯朱雀主要抓取三大机器特征：<strong>困惑度过低</strong>（过度工整的高频平滑过渡如“下一秒/做完这些/紧接着/不禁”）、<strong>突发性不足</strong>（句长齐整、缺乏长短错落）以及<strong>局部结构指纹</strong>（剧本冒号引语“：“”、感叹号拟声轰炸、连续三明治句式、修饰词“的/地”过密与单人 POV 破视角描写）。全书已永久录入<strong>晋江单章约 3,000 字（2,600–3,500 字）</strong>要领；<strong>第 02 章</strong>原封保留为朱雀 100% 过检基准，<strong>第 01 章及第 03–20 章</strong>均已完成逐章去 AI 味精修与门禁自检。
+                拆解“原第 02 章过朱雀 vs 原第 01 章 100% 疑似 AI”的量化差距后，定位到真正触发朱雀的核心机器信号：<strong>长逗号复句串</strong>（原二章句均 19.3 字、逗句比 1.31；原一章高达 25.5 字、逗句比 1.67）、<strong><code>动作。“台词”</code> 并列模板</strong>（原二章 0 次，原一章 9 次）、<strong>“地”字状语过密</strong>与<strong>大模型百科设定腔</strong>。全书已改定约 400 章紧凑体量，第 01–20 章（含扩充至 3,700 纯汉字的第 02 章）全部按二章短句口语基因重写并通过本地预检，可直接复制纯正文前往朱雀实测。
               </p>
             </div>
 
@@ -521,16 +521,14 @@ export function ContinuityEngine() {
                         {report.title}
                       </h3>
                       <p className="mt-1 text-xs font-folio text-stone-500 dark:text-stone-400">
-                        正文 {report.charCount.toLocaleString()} 字（{report.jinjiangLengthNote}） ·{' '}
-                        {report.paragraphCount} 段 · 句长方差{' '}
-                        {report.sentenceStdDev} · 短句{' '}
-                        {report.shortSentenceRatio}% · 的/地{' '}
-                        {report.deDensityPer100}/百字
+                        纯汉字 {report.cjkCharCount.toLocaleString()} 字（{report.jinjiangLengthNote}） ·{' '}
+                        {report.paragraphCount} 段 · 句均 {report.avgSentenceLen} 字 · 逗句比{' '}
+                        {report.commaToPeriodRatio}
                       </p>
                       <p className="mt-1 text-xs font-folio text-stone-500 dark:text-stone-400">
-                        剧本冒号 {report.colonQuoteCount} 次 · 感叹号{' '}
-                        {report.exclamationCount} 处 · 三明治句{' '}
-                        {report.splitDialogueCount} 次 · {report.zhuqueTier}
+                        动作。“ {report.actionPeriodQuoteCount} 次 · 剧本冒号{' '}
+                        {report.colonQuoteCount} 次 · 地 {report.diDensityPer100}% · 的{' '}
+                        {report.deDensityPer100}% · {report.zhuqueTier}
                       </p>
                     </div>
                     <div
@@ -556,7 +554,7 @@ export function ContinuityEngine() {
 
                   {report.findings.length === 0 ? (
                     <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
-                      已通过全项确定性检验：冒号剧本腔与拟声套词归零、句长突发性贴近第 02 章过检基准、定语“的/地”低密度、零 AI 套话与提前剧透词。
+                      已通过全项二章过检基因门禁：纯汉字 ≥3,000、短句断拍（句均 ≤23.5 / 逗句比 ≤1.48）、零“动作。“台词””与剧本冒号、低“的/地”密度、零 AI 套话与剧透词。
                     </p>
                   ) : (
                     <ul className="space-y-2 text-xs">
