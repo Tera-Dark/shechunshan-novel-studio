@@ -1,6 +1,6 @@
 {
-  "name": "长夜渡",
-  "description": "修仙耽美长篇创作设定集与正文试读典藏馆——双线叙事、宿命重逢、世道人心与不灭长灯。",
+  "name": "赊春山 · 修仙耽美创作设定集",
+  "description": "《赊春山》原创修仙耽美企划设定集、连载防吃书中枢、朱雀反 AI 质检门禁与正文试读典藏馆。",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

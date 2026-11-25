@@ -53,6 +53,8 @@ export function ContinuityEngine() {
         '已露端倪',
         '已锁定暗格',
         '待触发',
+        '核心活跃',
+        '已部分回收',
       ];
       return FORESHADOW_THREADS.filter((item) =>
         activeStatuses.includes(item.status)
@@ -88,7 +90,7 @@ export function ContinuityEngine() {
     return [
       '# 《赊春山》下一轮续写防吃书上下文包（Context Compiler 自动汇编）',
       '',
-      '## 一、待推进章节细纲（下一轮优先：第 07–09 章）',
+      '## 一、待推进章节细纲（下一轮优先：第 21–25 章）',
       beatsMarkdown,
       '',
       '## 二、角色运行态与 POV 知识边界矩阵',
@@ -220,7 +222,7 @@ export function ContinuityEngine() {
               下一轮衔接目标
             </p>
             <p className="mt-1.5 text-2xl font-semibold font-folio text-[#9A3412] dark:text-[#D97757]">
-              第 07–09 章
+              第 21–25 章
             </p>
             <p className="mt-1 text-xs text-stone-600 dark:text-stone-400">
               含 {upcomingBeats.length} 组待写章回细纲
@@ -262,7 +264,7 @@ export function ContinuityEngine() {
             })}
           </div>
           <p className="text-xs font-folio text-stone-500 dark:text-stone-400">
-            状态基准：截至第 06 章末（三月十六日四更）
+            状态基准：截至第 20 章末（三月二十三子时）
           </p>
         </div>
 
@@ -470,7 +472,7 @@ export function ContinuityEngine() {
             <div className="p-6 bg-[#F4F0E8] dark:bg-[#1E1C19] border border-stone-200 dark:border-stone-800 space-y-3">
               <div className="flex items-center gap-2 text-sm font-semibold text-stone-900 dark:text-stone-100">
                 <GitBranch className="w-4 h-4 text-[#9A3412] dark:text-[#D97757]" aria-hidden="true" />
-                <span>下一批推进锚点（第 07–09 章写前锁定）</span>
+                <span>下一批推进锚点（第 21–25 章写前锁定）</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
                 {upcomingBeats.slice(0, 3).map((beat) => (
@@ -493,6 +495,20 @@ export function ContinuityEngine() {
 
         {activeTab === 'linter' && (
           <div className="space-y-8">
+            <div className="p-5 sm:p-6 bg-[#F4F0E8] dark:bg-[#1E1C19] border border-stone-200 dark:border-stone-800 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-3 border-b border-stone-200 dark:border-stone-800">
+                <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
+                  晋江五项 AI 抽检对标 · 朱雀三大特征预检与 3,000 字门禁
+                </h3>
+                <span className="text-xs font-folio text-stone-500 dark:text-stone-400">
+                  对标：阅文 · 朱雀（最严） · DS · GLM · 千问 · 晋江约 3,000 字/章
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-300 leading-relaxed">
+                依据社区公开分析，腾讯朱雀主要抓取三大机器特征：<strong>困惑度过低</strong>（过度工整的高频平滑过渡如“下一秒/做完这些/紧接着/不禁”）、<strong>突发性不足</strong>（句长齐整、缺乏长短错落）以及<strong>局部结构指纹</strong>（剧本冒号引语“：“”、感叹号拟声轰炸、连续三明治句式、修饰词“的/地”过密与单人 POV 破视角描写）。全书已永久录入<strong>晋江单章约 3,000 字（2,600–3,500 字）</strong>要领；<strong>第 02 章</strong>原封保留为朱雀 100% 过检基准，<strong>第 01 章及第 03–20 章</strong>均已完成逐章去 AI 味精修与门禁自检。
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {lintReports.map((report) => (
                 <div
@@ -505,11 +521,16 @@ export function ContinuityEngine() {
                         {report.title}
                       </h3>
                       <p className="mt-1 text-xs font-folio text-stone-500 dark:text-stone-400">
-                        正文 {report.charCount.toLocaleString()} 字 ·{' '}
+                        正文 {report.charCount.toLocaleString()} 字（{report.jinjiangLengthNote}） ·{' '}
                         {report.paragraphCount} 段 · 句长方差{' '}
-                        {report.sentenceStdDev} · 短句占比{' '}
-                        {report.shortSentenceRatio}% · “的/地”{' '}
+                        {report.sentenceStdDev} · 短句{' '}
+                        {report.shortSentenceRatio}% · 的/地{' '}
                         {report.deDensityPer100}/百字
+                      </p>
+                      <p className="mt-1 text-xs font-folio text-stone-500 dark:text-stone-400">
+                        剧本冒号 {report.colonQuoteCount} 次 · 感叹号{' '}
+                        {report.exclamationCount} 处 · 三明治句{' '}
+                        {report.splitDialogueCount} 次 · {report.zhuqueTier}
                       </p>
                     </div>
                     <div
@@ -535,7 +556,7 @@ export function ContinuityEngine() {
 
                   {report.findings.length === 0 ? (
                     <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
-                      已通过全项确定性检验：句长突发性高、定语“的/地”压缩至低密度、零 AI 高频套话与现代系统腔、无提前剧透词。
+                      已通过全项确定性检验：冒号剧本腔与拟声套词归零、句长突发性贴近第 02 章过检基准、定语“的/地”低密度、零 AI 套话与提前剧透词。
                     </p>
                   ) : (
                     <ul className="space-y-2 text-xs">

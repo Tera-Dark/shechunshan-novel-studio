@@ -203,12 +203,12 @@ export default function App() {
                     {
                       page: 'outlines' as AppPage,
                       title: '分卷与细纲',
-                      desc: '八卷千章结构 & 卷一 1–15 章逐章细纲表',
+                      desc: '八卷千章结构 & 卷一 1–25 章逐章细纲表',
                     },
                     {
                       page: 'protagonists' as AppPage,
                       title: '人物志',
-                      desc: '晏寒江 / 许知微完整生平 & 宿敌与南荒群像',
+                      desc: '谢峥 / 楚越完整生平 & 宿敌与南荒群像',
                     },
                     {
                       page: 'worldbuilding' as AppPage,
@@ -218,7 +218,7 @@ export default function App() {
                     {
                       page: 'reader' as AppPage,
                       title: '正文阅读室',
-                      desc: '沉浸读 1–6 章正文，一键复制纯正文或导出 txt/md',
+                      desc: '沉浸读 1–20 章正文，一键复制纯正文或导出 txt/md',
                     },
                     {
                       page: 'engine' as AppPage,
@@ -298,7 +298,7 @@ export default function App() {
                         : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
                     }`}
                   >
-                    卷一 1–15 章细纲表
+                    卷一 1–25 章细纲表
                   </button>
                 </div>
               </div>

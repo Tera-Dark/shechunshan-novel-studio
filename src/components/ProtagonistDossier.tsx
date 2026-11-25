@@ -6,11 +6,20 @@ type CharacterSubPage = 'yan' | 'xu' | 'ensemble' | 'craft';
 
 export function ProtagonistDossier() {
   const [subPage, setSubPage] = useState<CharacterSubPage>('yan');
+  const [selectedRefIdx, setSelectedRefIdx] = useState(0);
 
   const activeProtagonist: Protagonist | undefined =
     subPage === 'yan' || subPage === 'xu'
       ? PROTAGONISTS.find((p) => p.id === subPage)
       : undefined;
+
+  const activeRef =
+    activeProtagonist?.references[selectedRefIdx] ?? activeProtagonist?.references[0];
+
+  const handleSelectSubPage = (key: CharacterSubPage) => {
+    setSubPage(key);
+    setSelectedRefIdx(0);
+  };
 
   return (
     <section id="protagonists" className="py-12 lg:py-16">
@@ -31,8 +40,8 @@ export function ProtagonistDossier() {
             aria-label="切换人物子页面"
           >
             {[
-              { key: 'yan', label: '晏寒江 · 完整档案' },
-              { key: 'xu', label: '许知微 · 完整档案' },
+              { key: 'yan', label: '谢峥 · 字临渊' },
+              { key: 'xu', label: '楚越 · 字栖寒' },
               { key: 'ensemble', label: '宿敌与南荒群像' },
               { key: 'craft', label: '人物张力与写作法则' },
             ].map((tab) => {
@@ -43,7 +52,7 @@ export function ProtagonistDossier() {
                   type="button"
                   role="tab"
                   aria-selected={active}
-                  onClick={() => setSubPage(tab.key as CharacterSubPage)}
+                  onClick={() => handleSelectSubPage(tab.key as CharacterSubPage)}
                   className={`px-4 py-2 text-xs sm:text-sm whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                     active
                       ? 'bg-[#FBF9F5] dark:bg-[#161513] text-[#9A3412] dark:text-[#D97757] font-semibold'
@@ -60,13 +69,60 @@ export function ProtagonistDossier() {
         {activeProtagonist && (
           <div className="mt-10 space-y-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-              <div className="lg:col-span-5">
+              <div className="lg:col-span-5 space-y-4">
                 <ResilientArtwork
-                  src={activeProtagonist.image}
-                  alt={`${activeProtagonist.name}人物设定立绘`}
-                  caption={activeProtagonist.imageCaption}
+                  src={activeRef?.src ?? activeProtagonist.image}
+                  alt={`${activeProtagonist.name} · ${activeRef?.label ?? '人物参考'}`}
+                  caption={
+                    activeRef
+                      ? `${activeRef.label} — ${activeRef.note}`
+                      : activeProtagonist.imageCaption
+                  }
                   aspectClass="aspect-[3/4]"
                 />
+
+                {activeProtagonist.references.length > 1 && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-folio text-stone-500 dark:text-stone-400">
+                      定版原创立绘切换（点击切换大图）
+                    </p>
+                    <div className="grid grid-cols-2 gap-3">
+                      {activeProtagonist.references.map((ref, idx) => {
+                        const isSelected = idx === selectedRefIdx;
+                        return (
+                          <button
+                            key={ref.src}
+                            type="button"
+                            onClick={() => setSelectedRefIdx(idx)}
+                            className={`text-left border transition-colors cursor-pointer overflow-hidden bg-[#F4F0E8] dark:bg-[#1E1C19] ${
+                              isSelected
+                                ? 'border-[#9A3412] dark:border-[#D97757]'
+                                : 'border-stone-200 dark:border-stone-800 hover:border-stone-400 dark:hover:border-stone-600'
+                            }`}
+                          >
+                            <div className="aspect-[4/3] overflow-hidden bg-stone-900/5 dark:bg-black/30">
+                              <img
+                                src={ref.src}
+                                alt={ref.label}
+                                referrerPolicy="no-referrer"
+                                className="w-full h-full object-cover object-top"
+                              />
+                            </div>
+                            <p
+                              className={`px-2.5 py-2 text-xs truncate ${
+                                isSelected
+                                  ? 'text-[#9A3412] dark:text-[#D97757] font-semibold'
+                                  : 'text-stone-600 dark:text-stone-400'
+                              }`}
+                            >
+                              {ref.label}
+                            </p>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="lg:col-span-7 space-y-6">
@@ -80,16 +136,37 @@ export function ProtagonistDossier() {
                     <h3 className="text-3xl lg:text-4xl font-bold text-stone-900 dark:text-stone-100">
                       {activeProtagonist.name}
                     </h3>
-                    <span className="text-base text-stone-600 dark:text-stone-400">
+                    <span className="text-base text-[#9A3412] dark:text-[#D97757] font-medium">
                       {activeProtagonist.courtesyName}
                     </span>
                   </div>
+                  <p className="mt-2.5 text-xs sm:text-sm font-folio text-stone-600 dark:text-stone-400">
+                    {activeProtagonist.nameOrigin}
+                  </p>
                   <p className="mt-4 text-base leading-relaxed text-stone-700 dark:text-stone-300">
                     {activeProtagonist.coreTrait}
                   </p>
                 </div>
 
                 <dl className="divide-y divide-stone-200 dark:divide-stone-800 text-sm">
+                  <div className="py-4 grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4">
+                    <dt className="font-semibold text-stone-900 dark:text-stone-100">
+                      形貌衣冠
+                    </dt>
+                    <dd className="sm:col-span-3 text-stone-700 dark:text-stone-300 leading-relaxed">
+                      {activeProtagonist.visualSummary}
+                    </dd>
+                  </div>
+                  {activeProtagonist.maskDesign && (
+                    <div className="py-4 grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4">
+                      <dt className="font-semibold text-stone-900 dark:text-stone-100">
+                        专属面具
+                      </dt>
+                      <dd className="sm:col-span-3 text-stone-700 dark:text-stone-300 leading-relaxed">
+                        {activeProtagonist.maskDesign}
+                      </dd>
+                    </div>
+                  )}
                   <div className="py-4 grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4">
                     <dt className="font-semibold text-stone-900 dark:text-stone-100">
                       随身重器
@@ -188,9 +265,14 @@ export function ProtagonistDossier() {
                     <span aria-hidden="true">·</span>
                     <span>{member.affiliation}</span>
                   </div>
-                  <h3 className="text-2xl font-semibold text-stone-900 dark:text-stone-100 mb-3">
+                  <h3 className="text-2xl font-semibold text-stone-900 dark:text-stone-100 mb-2">
                     {member.name}
                   </h3>
+                  {member.courtesyAndOrigin && (
+                    <p className="text-xs font-folio text-[#9A3412] dark:text-[#D97757] mb-3 leading-relaxed">
+                      {member.courtesyAndOrigin}
+                    </p>
+                  )}
                   <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-400 mb-3">
                     <span className="font-semibold text-stone-800 dark:text-stone-200">
                       表象：

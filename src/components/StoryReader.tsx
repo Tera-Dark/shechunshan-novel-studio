@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   BookOpen,
   Check,
@@ -11,6 +11,7 @@ import {
   Sun,
 } from 'lucide-react';
 import { CHAPTERS } from '../data/codexData';
+import { lintStoryChapters } from '../utils/continuityLinter';
 
 interface StoryReaderProps {
   isDark: boolean;
@@ -24,6 +25,10 @@ export function StoryReader({ isDark, onToggleDark }: StoryReaderProps) {
   const [copiedChapter, setCopiedChapter] = useState(false);
 
   const chapter = CHAPTERS[chapterIndex] ?? CHAPTERS[0];
+  const currentLint = useMemo(
+    () => lintStoryChapters([chapter])[0],
+    [chapter]
+  );
 
   const handlePrev = () => {
     setChapterIndex((prev) => Math.max(0, prev - 1));
@@ -112,61 +117,78 @@ export function StoryReader({ isDark, onToggleDark }: StoryReaderProps) {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-6">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="mt-6 space-y-4 border-b border-stone-200 dark:border-stone-800 pb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 border-t border-l border-stone-200 dark:border-stone-800">
             {CHAPTERS.map((item, idx) => {
               const active = idx === chapterIndex;
+              const numLabel = String(idx + 1).padStart(2, '0');
+              const shortTitle = item.title.replace(/^第[一二三四五六七八九十百零\d]+章[\s　]*/, '');
               return (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setChapterIndex(idx)}
-                  className={`px-4 py-2.5 text-sm whitespace-nowrap shrink-0 border transition-colors cursor-pointer ${
+                  title={item.title}
+                  className={`px-3 py-2.5 text-left border-r border-b border-stone-200 dark:border-stone-800 transition-colors cursor-pointer flex items-baseline gap-2 min-w-0 ${
                     active
-                      ? 'bg-[#1C1917] dark:bg-[#EDE8DF] text-[#FBF9F5] dark:text-[#161513] border-[#1C1917] dark:border-[#EDE8DF] font-semibold'
-                      : 'bg-transparent text-stone-700 dark:text-stone-300 border-stone-300 dark:border-stone-700 hover:bg-[#F3EFE6] dark:hover:bg-[#23201C]'
+                      ? 'bg-[#1C1917] dark:bg-[#EDE8DF] text-[#FBF9F5] dark:text-[#161513] font-semibold'
+                      : 'bg-[#FBF9F5] dark:bg-[#161513] text-stone-700 dark:text-stone-300 hover:bg-[#F3EFE6] dark:hover:bg-[#23201C]'
                   }`}
                 >
-                  {item.title}
+                  <span
+                    className={`font-folio text-[11px] shrink-0 ${
+                      active
+                        ? 'text-[#D97757] dark:text-[#9A3412]'
+                        : 'text-stone-400 dark:text-stone-500'
+                    }`}
+                  >
+                    {numLabel}
+                  </span>
+                  <span className="text-xs truncate">{shortTitle}</span>
                 </button>
               );
             })}
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={handleCopyPureText}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs whitespace-nowrap shrink-0 border border-[#9A3412]/40 dark:border-[#D97757]/50 text-[#9A3412] dark:text-[#D97757] hover:bg-[#9A3412]/5 dark:hover:bg-[#D97757]/10 transition-colors cursor-pointer"
-            >
-              {copiedChapter ? (
-                <>
-                  <Check className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span>已复制纯正文</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span>复制纯正文（送检用）</span>
-                </>
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDownloadChapter('txt')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs whitespace-nowrap shrink-0 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-[#F3EFE6] dark:hover:bg-[#23201C] transition-colors cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>导出 .txt</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDownloadChapter('md')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs whitespace-nowrap shrink-0 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-[#F3EFE6] dark:hover:bg-[#23201C] transition-colors cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>导出 .md</span>
-            </button>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs font-folio text-stone-500 dark:text-stone-400">
+              当前阅读：{chapter.title} · 正文 {currentLint.charCount.toLocaleString()} 字（{currentLint.jinjiangLengthNote}）
+            </p>
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleCopyPureText}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs whitespace-nowrap shrink-0 border border-[#9A3412]/40 dark:border-[#D97757]/50 text-[#9A3412] dark:text-[#D97757] hover:bg-[#9A3412]/5 dark:hover:bg-[#D97757]/10 transition-colors cursor-pointer"
+              >
+                {copiedChapter ? (
+                  <>
+                    <Check className="w-3.5 h-3.5" aria-hidden="true" />
+                    <span>已复制纯正文</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" aria-hidden="true" />
+                    <span>复制纯正文（送检用）</span>
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDownloadChapter('txt')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs whitespace-nowrap shrink-0 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-[#F3EFE6] dark:hover:bg-[#23201C] transition-colors cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>导出 .txt</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDownloadChapter('md')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs whitespace-nowrap shrink-0 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-[#F3EFE6] dark:hover:bg-[#23201C] transition-colors cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>导出 .md</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -223,7 +245,7 @@ export function StoryReader({ isDark, onToggleDark }: StoryReaderProps) {
               </button>
 
               <span className="font-folio text-xs text-stone-500 dark:text-stone-400">
-                0{chapterIndex + 1} / 0{CHAPTERS.length}
+                {String(chapterIndex + 1).padStart(2, '0')} / {String(CHAPTERS.length).padStart(2, '0')}
               </span>
 
               <button
@@ -240,6 +262,56 @@ export function StoryReader({ isDark, onToggleDark }: StoryReaderProps) {
 
           {showNotes && (
             <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+              {chapter.id === 'ch-1' && (
+                <div className="p-6 bg-[#F4F0E8] dark:bg-[#1E1C19] border border-stone-200 dark:border-stone-800 space-y-4">
+                  <div className="pb-3 border-b border-stone-200 dark:border-stone-800">
+                    <p className="text-xs font-folio text-[#9A3412] dark:text-[#D97757] mb-1">
+                      朱雀去 AI 优化记录 · 对标第 02 章过检基准
+                    </p>
+                    <h4 className="text-base font-semibold text-stone-900 dark:text-stone-100">
+                      针对 0.57–0.5964 疑似 AI 的四项定向改写
+                    </h4>
+                  </div>
+                  <dl className="space-y-3 text-xs leading-relaxed">
+                    <div>
+                      <dt className="font-semibold text-stone-900 dark:text-stone-100">
+                        01. 清零剧本式冒号引语（7 → 0）
+                      </dt>
+                      <dd className="mt-0.5 text-stone-600 dark:text-stone-400">
+                        拆除全部“动作+神态：“台词””模板，改用与第 02 章一致的先出话后补动作、句号隔断及裸对话。
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-stone-900 dark:text-stone-100">
+                        02. 剔除拟声词、感叹号与过渡套词（17 → 0）
+                      </dt>
+                      <dd className="mt-0.5 text-stone-600 dark:text-stone-400">
+                        删去啪地、啪叽、啪嚓、轰隆、嘻嘻、呸呸呸、嗤笑、下一秒、做完这些及 7 个感叹号，还原平实物理白描。
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-stone-900 dark:text-stone-100">
+                        03. 修复单人 POV 越界与百科简介腔
+                      </dt>
+                      <dd className="mt-0.5 text-stone-600 dark:text-stone-400">
+                        删除楚越视角下抽离描写自己“下巴尖、嘴唇白、眼睛透亮”的大模型人设段，改回对谢峥的直观观察。
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-stone-900 dark:text-stone-100">
+                        04. 压缩“的/地”至 {currentLint.deDensityPer100}/百字并扩至晋江 3000+ 字量级
+                      </dt>
+                      <dd className="mt-0.5 text-stone-600 dark:text-stone-400">
+                        当前正文 {currentLint.charCount.toLocaleString()} 字、句长方差 {currentLint.sentenceStdDev}、短句占比 {currentLint.shortSentenceRatio}%、冒号引语与感叹号全清零，完整保留五花肉补瓦、老槐避雷、同心链改阵与碎碗排骨等全部锚点。
+                      </dd>
+                    </div>
+                  </dl>
+                  <p className="pt-2 border-t border-stone-200 dark:border-stone-800 text-[11px] text-stone-500 dark:text-stone-400">
+                    可直接点击上方「复制纯正文（送检用）」，粘贴至腾讯朱雀实测验证。
+                  </p>
+                </div>
+              )}
+
               <div className="p-6 bg-[#F4F0E8] dark:bg-[#1E1C19] border border-stone-200 dark:border-stone-800">
                 <p className="text-xs text-[#9A3412] dark:text-[#D97757] mb-2">
                   节奏与人物拆解
