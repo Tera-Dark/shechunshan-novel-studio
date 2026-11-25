@@ -1,0 +1,6 @@
+{
+  "name": "长夜渡",
+  "description": "修仙耽美长篇创作设定集与正文试读典藏馆——双线叙事、宿命重逢、世道人心与不灭长灯。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

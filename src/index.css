@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-serif-editorial: "Noto Serif SC", "Cormorant Garamond", Georgia, serif;
+    --font-mono-folio: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-serif-editorial);
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+}
+
+.font-editorial {
+  font-family: "Noto Serif SC", "Cormorant Garamond", Georgia, serif;
+}
+
+.font-folio {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.drop-cap-zh::first-letter {
+  font-size: 2.75rem;
+  line-height: 1;
+  font-weight: 700;
+  float: left;
+  margin-right: 0.65rem;
+  margin-top: 0.2rem;
+  color: #9A3412;
+}
+
+.dark .drop-cap-zh::first-letter {
+  color: #D97757;
+}
