@@ -6,26 +6,9 @@ import charactersRaw from '../../story/03_角色档案_主角与群像.md?raw';
 import outlineRaw from '../../story/04_五卷大纲与双线编年.md?raw';
 import commercializationRaw from '../../story/05_千章连载商业化与读者钩子规划.md?raw';
 
-import ch1Raw from '../../story/chapters/第01章_五花肉账单与避雷槐.md?raw';
-import ch2Raw from '../../story/chapters/第02章_十五寒毒与渡灵夜.md?raw';
-import ch3Raw from '../../story/chapters/第03章_画皮阴契与故人来.md?raw';
-import ch4Raw from '../../story/chapters/第04章_一文钱买来的城南怪事.md?raw';
-import ch5Raw from '../../story/chapters/第05章_无面画师与错字铜钱.md?raw';
-import ch6Raw from '../../story/chapters/第06章_十六寒毒与近身渡气.md?raw';
-import ch7Raw from '../../story/chapters/第07章_三丈之外的血腥线.md?raw';
-import ch8Raw from '../../story/chapters/第08章_赵府地窖里的生辰八字.md?raw';
-import ch9Raw from '../../story/chapters/第09章_王屠户的旧刀伤.md?raw';
-import ch10Raw from '../../story/chapters/第10章_月圆前的试探交易.md?raw';
-import ch11Raw from '../../story/chapters/第11章_勘验玉符困局.md?raw';
-import ch12Raw from '../../story/chapters/第12章_暗厢贴耳与反杀局.md?raw';
-import ch13Raw from '../../story/chapters/第13章_活契现行与赵府对质.md?raw';
-import ch14Raw from '../../story/chapters/第14章_画押出鞘，死契首消.md?raw';
-import ch15Raw from '../../story/chapters/第15章_残印玉牌与掩袖遮眼.md?raw';
-import ch16Raw from '../../story/chapters/第16章_东屋药罐与半寸旧伤.md?raw';
-import ch17Raw from '../../story/chapters/第17章_城西旧窑与无名药渣.md?raw';
-import ch18Raw from '../../story/chapters/第18章_盲翁修伞与雨巷旧桩.md?raw';
-import ch19Raw from '../../story/chapters/第19章_废窑暗探与冷铁炉灰.md?raw';
-import ch20Raw from '../../story/chapters/第20章_药丸异香与三丈灯火.md?raw';
+import ch1Raw from '../../story/chapters/第01章_替死红灯与白衣客.md?raw';
+import ch2Raw from '../../story/chapters/第02章_渡口冷茶与半分阵偏.md?raw';
+import ch3Raw from '../../story/chapters/第03章_象牙扇与渡口旧账.md?raw';
 
 import trackerForeshadowRaw from '../../story/tracker/01_伏笔追踪总表.md?raw';
 import trackerStateRaw from '../../story/tracker/02_角色状态与POV边界矩阵.md?raw';
@@ -34,8 +17,19 @@ import wbCharterRaw from '../../story/writing-base/00_文风基准与去AI味宪
 import wbDictionaryRaw from '../../story/writing-base/01_设定与事实词典.md?raw';
 import wbChecklistRaw from '../../story/writing-base/03_章节写作与深度去AI味检查清单.md?raw';
 import wbHumanStyleRaw from '../../story/writing-base/04_高人味文风拆解参考.md?raw';
-import wbTianguanRefRaw from '../../story/writing-base/05_天官赐福文风与叙事范本拆解.md?raw';
 import wbSummaryRaw from '../../story/writing-base/99_章节摘要.md?raw';
+
+import heIndexRaw from '../../story/human-examples/00_收纳目录与归类说明.txt?raw';
+import heS1King1Raw from '../../story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/01_孤王忆起和美人的过往.txt?raw';
+import heS1King2Raw from '../../story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/02_孤王竟也是个昏君做派.txt?raw';
+import heS1King3Raw from '../../story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/03_孤王的美人病了.txt?raw';
+import heS1King4Raw from '../../story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/04_孤王的爱妃病重了.txt?raw';
+import heS1King5Raw from '../../story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/05_孤王要做名留千史的昏君了.txt?raw';
+import heS1Consort1Raw from '../../story/human-examples/系列一_昏君与狸奴妖妃/02_妖妃视角/01_我是个妖妃.txt?raw';
+import heS1Consort2Raw from '../../story/human-examples/系列一_昏君与狸奴妖妃/02_妖妃视角/02_我是祸国殃民的妖妃.txt?raw';
+import heS2M1Raw from '../../story/human-examples/系列二_主君与稚雀/01_吾姬性柔，深得吾心.txt?raw';
+import heS2M2Raw from '../../story/human-examples/系列二_主君与稚雀/02_君侯老矣.txt?raw';
+import heS3S1Raw from '../../story/human-examples/系列三_仙侠师徒/01_我是被师尊捡回来的小徒弟.txt?raw';
 
 export type DocCategory =
   | '铁律与文风'
@@ -80,23 +74,6 @@ export const PARSED_CHAPTERS = {
   ch1: parseMarkdownChapter(ch1Raw),
   ch2: parseMarkdownChapter(ch2Raw),
   ch3: parseMarkdownChapter(ch3Raw),
-  ch4: parseMarkdownChapter(ch4Raw),
-  ch5: parseMarkdownChapter(ch5Raw),
-  ch6: parseMarkdownChapter(ch6Raw),
-  ch7: parseMarkdownChapter(ch7Raw),
-  ch8: parseMarkdownChapter(ch8Raw),
-  ch9: parseMarkdownChapter(ch9Raw),
-  ch10: parseMarkdownChapter(ch10Raw),
-  ch11: parseMarkdownChapter(ch11Raw),
-  ch12: parseMarkdownChapter(ch12Raw),
-  ch13: parseMarkdownChapter(ch13Raw),
-  ch14: parseMarkdownChapter(ch14Raw),
-  ch15: parseMarkdownChapter(ch15Raw),
-  ch16: parseMarkdownChapter(ch16Raw),
-  ch17: parseMarkdownChapter(ch17Raw),
-  ch18: parseMarkdownChapter(ch18Raw),
-  ch19: parseMarkdownChapter(ch19Raw),
-  ch20: parseMarkdownChapter(ch20Raw),
 };
 
 export const STORY_FILES: StoryDocFile[] = [
@@ -106,7 +83,7 @@ export const STORY_FILES: StoryDocFile[] = [
     filename: '06_创作铁律与动态复查备忘录.md',
     title: '创作铁律与动态复查备忘录',
     category: '铁律与文风',
-    summary: '动态复查与防遗忘最高准则：晋江 3000 字铁律、文风配比、六大防穿帮技术桩与第 1–20 章剧情账本。',
+    summary: '重构版创作铁律：400 章体量、每章 ≥3,000 纯汉字、卡兹克人味叙事红线与新第 1–3 章剧情账本。',
     content: auditMemoRaw,
   },
   {
@@ -115,7 +92,7 @@ export const STORY_FILES: StoryDocFile[] = [
     filename: '00_文风基准与去AI味宪章.md',
     title: '编写基地 · 文风基准与去 AI 味宪章',
     category: '铁律与文风',
-    summary: '融合 chinese-novelist-skill 白描/留白/潜台词技法与朱雀 0.4077 实测绿灯基因的单一文风事实源。',
+    summary: '白描、留白、潜台词与自然人味虚构叙事基准，严禁翻案句、破折号、黑话与模板段式。',
     content: wbCharterRaw,
   },
   {
@@ -124,16 +101,16 @@ export const STORY_FILES: StoryDocFile[] = [
     filename: '03_章节写作与深度去AI味检查清单.md',
     title: '编写基地 · 单章四阶段去 AI 味检查清单',
     category: '铁律与文风',
-    summary: '写前准备 → 创作硬约束 → 深度去 AI 味与脚本门禁 → 摘要落盘与 80 分制自评表。',
+    summary: '写前准备 → 创作硬约束 → 深度去 AI 味与脚本门禁 → 摘要落盘与质检复核。',
     content: wbChecklistRaw,
   },
   {
     id: 'wb-dictionary',
     path: '/story/writing-base/01_设定与事实词典.md',
     filename: '01_设定与事实词典.md',
-    title: '编写基地 · 设定与事实词典（先登记后动笔）',
+    title: '编写基地 · 设定与事实词典（重构版）',
     category: '记忆与追踪',
-    summary: '严禁现场编数：锁定全书硬数字、时间线、视觉锚点、名词首现线索与 POV 知识边界。',
+    summary: '严禁现场编数：锁定白露河停云渡赊春堂硬数字、时间线、视觉锚点与 POV 知识边界。',
     content: wbDictionaryRaw,
   },
   {
@@ -142,16 +119,16 @@ export const STORY_FILES: StoryDocFile[] = [
     filename: '99_章节摘要.md',
     title: '编写基地 · 后果驱动型章节摘要底本',
     category: '记忆与追踪',
-    summary: '遵循 chinese-novelist-skill 摘要契约：记录关键后果、人物已知/未知与未了事项。',
+    summary: '记录新第 1–3 章关键后果、人物已知/未知与未了事项，供后续章节精准续写。',
     content: wbSummaryRaw,
   },
   {
     id: 'skill',
     path: '/story/00_去AI味与网文人味写作Skill.md',
     filename: '00_去AI味与网文人味写作Skill.md',
-    title: '去 AI 味与反朱雀检测写作 Skill',
+    title: '去 AI 味与网文人味写作 Skill',
     category: '铁律与文风',
-    summary: '含腾讯朱雀三大检测特征（困惑度/突发性/局部指纹）、晋江 3000 字/章标准与人工“毛刺感”规范。',
+    summary: '真人视角叙事原则、困惑度与句长起伏控制、晋江 3000 字/章标准与人工“毛刺感”规范。',
     content: skillGuideRaw,
   },
   {
@@ -160,25 +137,25 @@ export const STORY_FILES: StoryDocFile[] = [
     filename: '01_核心梗概与三大融合设定.md',
     title: '核心梗概与挑剔向设计总纲',
     category: '大纲与规划',
-    summary: '书名双层意象、恶犬骑士 × 驯犬执棋人、四重锁脉金链机制与《天官》《燕云》风骨融合法则。',
+    summary: '书名双层意象、恶犬骑士 × 驯犬执棋人、四重锁脉金链机制与江湖仙侠风骨融合法则。',
     content: premiseRaw,
   },
   {
     id: 'outline',
     path: '/story/04_五卷大纲与双线编年.md',
     filename: '04_五卷大纲与双线编年.md',
-    title: '八卷 400 章紧凑分卷详纲（1–400 章）',
+    title: '八卷 400 章全新重构总纲（1–400 章）',
     category: '大纲与规划',
-    summary: '紧凑版 8 大卷详纲：每卷 40–60 章由 2–3 个递进诡案+收网战撑实，绑定双脉消长与每章 ≥3,000 纯汉字。',
+    summary: '全新重构 8 大卷详纲：白露渡诡船起手至春山赊茶录收官，每卷三段紧凑诡案绑定双脉消长。',
     content: outlineRaw,
   },
   {
     id: 'commercialization',
     path: '/story/05_千章连载商业化与读者钩子规划.md',
     filename: '05_千章连载商业化与读者钩子规划.md',
-    title: '400 章连载节奏规划与卷一细纲',
+    title: '400 章连载节奏蓝图与卷一细纲（1–30 章）',
     category: '大纲与规划',
-    summary: '挑剔向读者的三大避坑指南、50–60 章紧凑循环模型，及第一卷前段逐章细纲（含智斗升级）。',
+    summary: '开篇十秒入局动态节奏模型，及全新第一卷《白露渡诡船》前 30 章逐章细纲。',
     content: commercializationRaw,
   },
   {
@@ -196,214 +173,151 @@ export const STORY_FILES: StoryDocFile[] = [
     filename: '03_角色档案_主角与群像.md',
     title: '双主角心理、逻辑补丁与全阵营档案',
     category: '世界与角色',
-    summary: '同朝未相认五重障碍、五年忍耐真相、玉清天尊理念镜像及卷一赵府/南荒暗卫完整配角卡。',
+    summary: '完整保留双主角与核心群像档案，同步更新卷一白露河停云渡单元配角卡（林大、林穗、水鬼牙人）。',
     content: charactersRaw,
   },
   {
     id: 'ch1',
-    path: '/story/chapters/第01章_五花肉账单与避雷槐.md',
-    filename: '第01章_五花肉账单与避雷槐.md',
-    title: '第 01 章 · 五花肉账单与避雷槐',
+    path: '/story/chapters/第01章_替死红灯与白衣客.md',
+    filename: '第01章_替死红灯与白衣客.md',
+    title: '第 01 章 · 替死红灯与白衣客',
     category: '正文草稿',
-    summary: '4,800 纯汉字 · 二章过检基因重构：雨巷烟火开篇、避雷槐断雨与谢峥携《降凡印》登门扣链。',
+    summary: '4,703 纯汉字 · 全新重构开篇：三月十五暴雨夜白露河红灯喜船索命，楚越截船破灯遇谢峥压灯扣链。',
     content: ch1Raw,
   },
   {
     id: 'ch2',
-    path: '/story/chapters/第02章_十五寒毒与渡灵夜.md',
-    filename: '第02章_十五寒毒与渡灵夜.md',
-    title: '第 02 章 · 十五寒毒与渡灵夜（3,700 纯汉字扩展版）',
+    path: '/story/chapters/第02章_渡口冷茶与半分阵偏.md',
+    filename: '第02章_渡口冷茶与半分阵偏.md',
+    title: '第 02 章 · 渡口冷茶与半分阵偏',
     category: '正文草稿',
-    summary: '3,700 纯汉字 · 沿袭原二章过检短句口语基因扩充：十五雷煞分流三成、拂晓滚烫姜汤与雨巷候客。',
+    summary: '5,893 纯汉字 · 赊春堂查出金链外偏半分暗抽三成雷煞、东厢桌裂焦血气，王猛送鳜鱼认表弟，谢峥熬姜汤切脉点破十六寒毒。',
     content: ch2Raw,
   },
   {
     id: 'ch3',
-    path: '/story/chapters/第03章_画皮阴契与故人来.md',
-    filename: '第03章_画皮阴契与故人来.md',
-    title: '第 03 章 · 画皮阴契与故人来',
+    path: '/story/chapters/第03章_象牙扇与渡口旧账.md',
+    filename: '第03章_象牙扇与渡口旧账.md',
+    title: '第 03 章 · 象牙扇与渡口旧账',
     category: '正文草稿',
-    summary: '3,421 纯汉字 · 二章基因重构：陆砚寒上门羞辱衬出楚越昔日荣光，谢峥亮链斥退切入赵府案。',
+    summary: '5,060 纯汉字 · 陆砚寒携《清白赎罪契》登门羞辱反遭折扇斥退，周三爷赠伞点出青泥渡盐仓老樟木与错字铜钱，共伞赴查。',
     content: ch3Raw,
-  },
-  {
-    id: 'ch4',
-    path: '/story/chapters/第04章_一文钱买来的城南怪事.md',
-    filename: '第04章_一文钱买来的城南怪事.md',
-    title: '第 04 章 · 一文钱买来的城南怪事',
-    category: '正文草稿',
-    summary: '3,326 纯汉字 · 二章基因重构：赵府验尸揭出秋棠无影尸与妆镜影滞，回廊里大司命换位挡风。',
-    content: ch4Raw,
-  },
-  {
-    id: 'ch5',
-    path: '/story/chapters/第05章_无面画师与错字铜钱.md',
-    filename: '第05章_无面画师与错字铜钱.md',
-    title: '第 05 章 · 无面画师与错字铜钱',
-    category: '正文草稿',
-    summary: '3,093 纯汉字 · 二章基因重构：三更鬼市周三爷撑伞挡镖，紫毫借脏墨反烧影祟，拾得缺竖错字钱。',
-    content: ch5Raw,
-  },
-  {
-    id: 'ch6',
-    path: '/story/chapters/第06章_十六寒毒与近身渡气.md',
-    filename: '第06章_十六寒毒与近身渡气.md',
-    title: '第 06 章 · 十六寒毒与近身渡气',
-    category: '正文草稿',
-    summary: '3,256 纯汉字 · 二章基因重构：十六寒毒猛爆被迫怀中渡灵，首嗅大司命衣襟深处陈年苦药味。',
-    content: ch6Raw,
-  },
-  {
-    id: 'ch7',
-    path: '/story/chapters/第07章_三丈之外的血腥线.md',
-    filename: '第07章_三丈之外的血腥线.md',
-    title: '第 07 章 · 三丈之外的血腥线',
-    category: '正文草稿',
-    summary: '受故意踩过三丈死线试探链纹惩戒，攻破土墙拍散火符拎回身侧，搜得陆氏焚卷密笺。',
-    content: ch7Raw,
-  },
-  {
-    id: 'ch8',
-    path: '/story/chapters/第08章_赵府地窖里的生辰八字.md',
-    filename: '第08章_赵府地窖里的生辰八字.md',
-    title: '第 08 章 · 赵府地窖里的生辰八字',
-    category: '正文草稿',
-    summary: '夜探地窖揭破亲父典卖女儿八字抵债真相；陆氏纵绿火灭口，攻以右臂挡梁护受抢出残页。',
-    content: ch8Raw,
-  },
-  {
-    id: 'ch9',
-    path: '/story/chapters/第09章_王屠户的旧刀伤.md',
-    filename: '第09章_王屠户的旧刀伤.md',
-    title: '第 09 章 · 王屠户的旧刀伤',
-    category: '正文草稿',
-    summary: '借买排骨麻油试探街坊，看破甲等戍边营金疮止血散与李大娘稳手，坐实雨巷暗卫。',
-    content: ch9Raw,
-  },
-  {
-    id: 'ch10',
-    path: '/story/chapters/第10章_月圆前的试探交易.md',
-    filename: '第10章_月圆前的试探交易.md',
-    title: '第 10 章 · 月圆前的试探交易',
-    category: '正文草稿',
-    summary: '受按住茶盏拿画押调侃立约“下回十六夜穿厚些”，大司命耳廓泛红应下并斟红糖姜枣茶。',
-    content: ch10Raw,
-  },
-  {
-    id: 'ch11',
-    path: '/story/chapters/第11章_勘验玉符困局.md',
-    filename: '第11章_勘验玉符困局.md',
-    title: '第 11 章 · 勘验玉符困局',
-    category: '正文草稿',
-    summary: '周平持《勘验玉符》封锁太渊剑；受背出《三界契约律》第十九条“活契现行”立下赌约。',
-    content: ch11Raw,
-  },
-  {
-    id: 'ch12',
-    path: '/story/chapters/第12章_暗厢贴耳与反杀局.md',
-    filename: '第12章_暗厢贴耳与反杀局.md',
-    title: '第 12 章 · 暗厢贴耳与反杀局',
-    category: '正文草稿',
-    summary: '三更夜袭鬼市画舫暗厢，盲雾中受贴耳低语、借同心链引一缕太渊剑意入紫毫破阵夺原契。',
-    content: ch12Raw,
-  },
-  {
-    id: 'ch13',
-    path: '/story/chapters/第13章_活契现行与赵府对质.md',
-    filename: '第13章_活契现行与赵府对质.md',
-    title: '第 13 章 · 活契现行与赵府对质',
-    category: '正文草稿',
-    summary: '清晨赵府对质，赵明珠亲听父亲认罪，活契怨煞当众震碎《勘验玉符》，无面画师催血傀灭口。',
-    content: ch13Raw,
-  },
-  {
-    id: 'ch14',
-    path: '/story/chapters/第14章_画押出鞘，死契首消.md',
-    filename: '第14章_画押出鞘，死契首消.md',
-    title: '第 14 章 · 画押出鞘，死契首消',
-    category: '正文草稿',
-    summary: '楚越朱砂画押定案，太渊剑合法出鞘斩血傀断阴契，替劫死契首消十道（365 → 355）。',
-    content: ch14Raw,
-  },
-  {
-    id: 'ch15',
-    path: '/story/chapters/第15章_残印玉牌与掩袖遮眼.md',
-    filename: '第15章_残印玉牌与掩袖遮眼.md',
-    title: '第 15 章 · 残印玉牌与掩袖遮眼',
-    category: '正文草稿',
-    summary: '破土地庙围堵无面画师，夺得刻有幽潭枯棘的缺角冷石玉牌，攻斩杀前本能抬袖遮住受双眼。',
-    content: ch15Raw,
-  },
-  {
-    id: 'ch16',
-    path: '/story/chapters/第16章_东屋药罐与半寸旧伤.md',
-    filename: '第16章_东屋药罐与半寸旧伤.md',
-    title: '第 16 章 · 东屋药罐与半寸旧伤',
-    category: '正文草稿',
-    summary: '东屋屏风翻倒露出雷公藤药罐；受卷开攻左袖见半寸雷灼旧伤，亲手敷玉露生肌膏立约。',
-    content: ch16Raw,
-  },
-  {
-    id: 'ch17',
-    path: '/story/chapters/第17章_城西旧窑与无名药渣.md',
-    filename: '第17章_城西旧窑与无名药渣.md',
-    title: '第 17 章 · 城西旧窑与无名药渣',
-    category: '正文草稿',
-    summary: '码头苦力往城西旧窑拉柴后失忆青甲；受查出阴寒药虚脉、错字《太平通宝》与冷铁灰药渣。',
-    content: ch17Raw,
-  },
-  {
-    id: 'ch18',
-    path: '/story/chapters/第18章_盲翁修伞与雨巷旧桩.md',
-    filename: '第18章_盲翁修伞与雨巷旧桩.md',
-    title: '第 18 章 · 盲翁修伞与雨巷旧桩',
-    category: '正文草稿',
-    summary: '周三爷点破“冷铁灰烧活松”与中州灰袍药商旧闻；雨中共伞点破雨巷退伍旧部渊源。',
-    content: ch18Raw,
-  },
-  {
-    id: 'ch19',
-    path: '/story/chapters/第19章_废窑暗探与冷铁炉灰.md',
-    filename: '第19章_废窑暗探与冷铁炉灰.md',
-    title: '第 19 章 · 废窑暗探与冷铁炉灰',
-    category: '正文草稿',
-    summary: '雨夜潜探旧窑撞见《寒髓丸》青铜药炉与活人试药桩，攻连鞘剑死守，受引湿火炸雾夺证。',
-    content: ch19Raw,
-  },
-  {
-    id: 'ch20',
-    path: '/story/chapters/第20章_药丸异香与三丈灯火.md',
-    filename: '第20章_药丸异香与三丈灯火.md',
-    title: '第 20 章 · 药丸异香与三丈灯火',
-    category: '正文草稿',
-    summary: '油灯下碾碎《寒髓丸》认出与攻身上旧药同源，受体贴收匣不逼问，共饮姜汤定下并肩之约。',
-    content: ch20Raw,
   },
   {
     id: 'wb-human-style',
     path: '/story/writing-base/04_高人味文风拆解参考.md',
     filename: '04_高人味文风拆解参考.md',
-    title: '高人味文风拆解与反朱雀实操参考',
+    title: '高人味文风拆解与实操参考',
     category: '铁律与文风',
-    summary: '基于朱雀实测数据的纯人工笔迹写作法：松弛说书人旁白、荒诞生活流对话与 AI 套组排查。',
+    summary: '纯人工笔迹写作法：松弛说书人旁白、接地气生活流对话与 AI 套组排查。',
     content: wbHumanStyleRaw,
   },
   {
-    id: 'wb-tianguan-ref',
-    path: '/story/writing-base/05_天官赐福文风与叙事范本拆解.md',
-    filename: '05_天官赐福文风与叙事范本拆解.md',
-    title: '《天官赐福》文风与叙事范本拆解',
+    id: 'he-index',
+    path: '/story/human-examples/00_收纳目录与归类说明.txt',
+    filename: '00_收纳目录与归类说明.txt',
+    title: '人文写作示例合集 · 总目录与归类说明',
     category: '铁律与文风',
-    summary: '结合范本前十章量化统计（62.6% 对话占比、44.1 字均段长），提炼五大叙事基因与《赊春山》对照落地方案。',
-    content: wbTianguanRefRaw,
+    summary: '三大系列共 10 篇独立拆分的纯人工高人味写作示例索引（昏君与狸奴妖妃、主君与稚雀、仙侠师徒）。',
+    content: heIndexRaw,
+  },
+  {
+    id: 'he-s1-king-01',
+    path: '/story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/01_孤王忆起和美人的过往.txt',
+    filename: '01_孤王忆起和美人的过往.txt',
+    title: '例文参考 · 系列一（孤王视角 01）孤王忆起和美人的过往',
+    category: '铁律与文风',
+    summary: '昏君与狸奴妖妃系列：凯旋雪地初遇狸奴，带回营帐许诺打天下。',
+    content: heS1King1Raw,
+  },
+  {
+    id: 'he-s1-king-02',
+    path: '/story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/02_孤王竟也是个昏君做派.txt',
+    filename: '02_孤王竟也是个昏君做派.txt',
+    title: '例文参考 · 系列一（孤王视角 02）孤王竟也是个昏君做派',
+    category: '铁律与文风',
+    summary: '昏君与狸奴妖妃系列：宠幸狸奴美人，持剑为美人诛杀进谏大臣。',
+    content: heS1King2Raw,
+  },
+  {
+    id: 'he-s1-king-03',
+    path: '/story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/03_孤王的美人病了.txt',
+    filename: '03_孤王的美人病了.txt',
+    title: '例文参考 · 系列一（孤王视角 03）孤王的美人病了',
+    category: '铁律与文风',
+    summary: '昏君与狸奴妖妃系列：美人染病戚戚垂泪，孤王持剑为取大臣心。',
+    content: heS1King3Raw,
+  },
+  {
+    id: 'he-s1-king-04',
+    path: '/story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/04_孤王的爱妃病重了.txt',
+    filename: '04_孤王的爱妃病重了.txt',
+    title: '例文参考 · 系列一（孤王视角 04）孤王的爱妃病重了',
+    category: '铁律与文风',
+    summary: '昏君与狸奴妖妃系列：爱妃病重惧色衰，巫祝入殿行祭祈之礼。',
+    content: heS1King4Raw,
+  },
+  {
+    id: 'he-s1-king-05',
+    path: '/story/human-examples/系列一_昏君与狸奴妖妃/01_孤王视角/05_孤王要做名留千史的昏君了.txt',
+    filename: '05_孤王要做名留千史的昏君了.txt',
+    title: '例文参考 · 系列一（孤王视角 05）孤王要做名留千史的昏君了',
+    category: '铁律与文风',
+    summary: '昏君与狸奴妖妃系列：美人气息危殆，孤王不顾鬼神剜心炙羹。',
+    content: heS1King5Raw,
+  },
+  {
+    id: 'he-s1-consort-01',
+    path: '/story/human-examples/系列一_昏君与狸奴妖妃/02_妖妃视角/01_我是个妖妃.txt',
+    filename: '01_我是个妖妃.txt',
+    title: '例文参考 · 系列一（妖妃视角 01）我是个妖妃',
+    category: '铁律与文风',
+    summary: '昏君与狸奴妖妃系列：试探求赐鸩酒，大王挥剑护短共枕眠。',
+    content: heS1Consort1Raw,
+  },
+  {
+    id: 'he-s1-consort-02',
+    path: '/story/human-examples/系列一_昏君与狸奴妖妃/02_妖妃视角/02_我是祸国殃民的妖妃.txt',
+    filename: '02_我是祸国殃民的妖妃.txt',
+    title: '例文参考 · 系列一（妖妃视角 02）我是祸国殃民的妖妃',
+    category: '铁律与文风',
+    summary: '昏君与狸奴妖妃系列：病重蜷于狐裘，大王衔血哺渡、歌谣哄睡。',
+    content: heS1Consort2Raw,
+  },
+  {
+    id: 'he-s2-01',
+    path: '/story/human-examples/系列二_主君与稚雀/01_吾姬性柔，深得吾心.txt',
+    filename: '01_吾姬性柔，深得吾心.txt',
+    title: '例文参考 · 系列二（主君与稚雀 01）吾姬性柔，深得吾心',
+    category: '铁律与文风',
+    summary: '主君与稚雀系列：稚雀惧枯骨虫窟，向主君求长生不老金丹。',
+    content: heS2M1Raw,
+  },
+  {
+    id: 'he-s2-02',
+    path: '/story/human-examples/系列二_主君与稚雀/02_君侯老矣.txt',
+    filename: '02_君侯老矣.txt',
+    title: '例文参考 · 系列二（主君与稚雀 02）君侯老矣',
+    category: '铁律与文风',
+    summary: '主君与稚雀系列：君侯垂老而稚雀鲜活，笑问“尚能饭否”。',
+    content: heS2M2Raw,
+  },
+  {
+    id: 'he-s3-01',
+    path: '/story/human-examples/系列三_仙侠师徒/01_我是被师尊捡回来的小徒弟.txt',
+    filename: '01_我是被师尊捡回来的小徒弟.txt',
+    title: '例文参考 · 系列三（仙侠师徒 01）我是被师尊捡回来的小徒弟',
+    category: '铁律与文风',
+    summary: '仙侠师徒系列：仙尊故去三年后魔尊逼婚，金铃震响引师尊弑生剑横空护徒。',
+    content: heS3S1Raw,
   },
   {
     id: 'tracker-foreshadow',
     path: '/story/tracker/01_伏笔追踪总表.md',
     filename: '01_伏笔追踪总表.md',
-    title: '伏笔追踪总表（F-01 至 F-11）',
+    title: '伏笔追踪总表（重构版 F-01 至 F-08）',
     category: '记忆与追踪',
-    summary: 'Foreshadowing Ledger：记录第 01–20 章全部伏笔回收进度与防泄底剧透红线。',
+    summary: '记录新第 01–03 章全部伏笔回收窗口与防泄底剧透红线。',
     content: trackerForeshadowRaw,
   },
   {
@@ -412,16 +326,16 @@ export const STORY_FILES: StoryDocFile[] = [
     filename: '02_角色状态与POV边界矩阵.md',
     title: '角色运行态与 POV 知识边界矩阵',
     category: '记忆与追踪',
-    summary: '截至第 20 章末实时锁定每位角色位置、身心伤势、随身道具与当前“已知/未知”认知边界。',
+    summary: '截至新第 03 章末实时锁定每位角色位置、伤势、随身道具与当前“已知/未知”认知边界。',
     content: trackerStateRaw,
   },
   {
     id: 'tracker-rolling',
     path: '/story/tracker/03_滚动摘要与章节质检记录.md',
     filename: '03_滚动摘要与章节质检记录.md',
-    title: '滚动摘要压缩与衔接锚点树（1–20 章）',
+    title: '滚动摘要压缩与章节质检记录（1–3 章）',
     category: '记忆与追踪',
-    summary: '金字塔上下文压缩记录：逐章提炼 1–20 章时间锚点、状态增量（Delta）与衔接重点。',
+    summary: '逐章记录新第 1–3 章纯汉字数、人味质检结果、状态增量（Delta）与章尾钩子。',
     content: trackerRollingRaw,
   },
 ];

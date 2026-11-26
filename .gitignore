@@ -4,6 +4,6 @@ dist/
 coverage/
 .DS_Store
 *.log
+*.zip
 .env*
 !.env.example
-天官赐福_*.zip

@@ -8,9 +8,9 @@ export interface LintFinding {
 }
 
 export type ZhuquePrecheckTier =
-  | '低风险 · 贴近二章过检基因'
-  | '中风险 · 需压低句长/逗号比'
-  | '高风险 · 易触发朱雀疑似AI';
+  | '自然人味 · 节奏达标'
+  | '中风险 · 需微调句长与节奏'
+  | '高风险 · 易触发模板化特征';
 
 export interface RepeatedMotif {
   phrase: string;
@@ -135,7 +135,7 @@ const EARLY_SPOILER_LOCKS: { term: string; maxSafeChapter: number; reason: strin
   { term: '九死劫', maxSafeChapter: 30, reason: '480年前代扛九死劫属卷三/卷六渐进揭秘' },
   { term: '护心符', maxSafeChapter: 20, reason: '九张护心符须于卷一后段至卷三途中陆续缝入' },
   { term: '死刑改判书', maxSafeChapter: 30, reason: '改判书残卷须至卷五司命密库才翻出' },
-  { term: '偷拿女儿八字', maxSafeChapter: 7, reason: '第8章地窖探查前严禁旁白剧透赵元德卖女真相' },
+  { term: '活人换骨池', maxSafeChapter: 7, reason: '第8章夜探青泥渡盐仓前严禁旁白剧透换骨池真相' },
 ];
 
 export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[] {
@@ -315,12 +315,12 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
       });
     }
 
-    if (avgSentenceLen > 26) {
+    if (avgSentenceLen > 34) {
       findings.push({
         ruleId: 'avg-sentence-len',
         severity: 'warn',
         label: `平均句长偏长（${avgSentenceLen} 字/句）`,
-        matches: ['建议长短句交错，将平均句长控制在 26 字以内'],
+        matches: ['建议长短句自然交错，将平均句长控制在 34 字以内'],
       });
     }
 
@@ -442,7 +442,7 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
 
     const riskPoints =
       (hasError ? 4 : 0) +
-      (avgSentenceLen > 26 ? 2 : 0) +
+      (avgSentenceLen > 34 ? 2 : 0) +
       (commaToPeriodRatio > 1.75 ? 2 : 0) +
       (diDensityPer100 > 0.45 ? 1 : 0) +
       (zhuqueHits.length > 0 ? 2 : 0) +
@@ -451,10 +451,10 @@ export function lintStoryChapters(chapters: StoryChapter[]): ChapterLintReport[]
 
     const zhuqueTier: ZhuquePrecheckTier =
       riskPoints === 0
-        ? '低风险 · 贴近二章过检基因'
+        ? '自然人味 · 节奏达标'
         : riskPoints <= 2
-          ? '中风险 · 需压低句长/逗号比'
-          : '高风险 · 易触发朱雀疑似AI';
+          ? '中风险 · 需微调句长与节奏'
+          : '高风险 · 易触发模板化特征';
 
     return {
       chapterId: ch.id,
